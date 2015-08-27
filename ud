@@ -2,7 +2,8 @@
 
 # Change directories quicker.
 #
-# This file needs to be aliased by your .bashrc
+# This file must be sourced in your .bashrc as follows:
+#    . /path/to/ud
 #
 # USAGE
 #   ud [number]
