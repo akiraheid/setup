@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Change directories quicker.
+#
+# This file needs to be aliased by your .bashrc
+#
+# USAGE
+#   ud [number]
+#
+# number  The number of directories to move up. If no number is given, it
+#         moves up one directory.
+#  
+
+function ud() {
+  if [[ $1 -eq 0 ]]; then
+    cd ..
+  else
+    NUM=$1
+    while [[ $NUM -ne 0 ]]
+    do
+      cd ..
+      NUM=$NUM-1
+    done
+  fi
+}
