@@ -1,2 +1,2 @@
-# scripts
-A repository for simple tools.
+# Setup
+Repository for my setup.
