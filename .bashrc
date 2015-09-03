@@ -16,7 +16,7 @@ shopt -s checkwinsize
 
 
 
-# Custom setup stuff. Change this directory to whereever you clone the git repo to
+# Custom setup stuff. Change this directory to wherever you clone the git repo to
 SETUP_DIR=~/code/setup
 
 # Up directory script
@@ -33,7 +33,8 @@ alias la='ls -ahA --color=always'
 
 
 
-# Terminal input format
+# Terminal coloring
+tput setab 233
 BLUE="$(tput setaf 62)"
 GREEN="$(tput setaf 83)"
 RED="$(tput setaf 196)"
@@ -43,7 +44,7 @@ AT=${RED}
 HOST=${BLUE}
 CUR_DIR=${RED}
 
-export PS1="\[${USERNAME}\u${AT}@${HOST}\h${WHITE} ${CUR_DIR}\w\n${WHITE}> \]"
+export PS1="\[${USERNAME}\]\u\[${AT}\]@\[${HOST}\]\h \[${CUR_DIR}\]\w\n\[${WHITE}\]> "
 
 
 
