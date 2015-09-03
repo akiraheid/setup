@@ -34,7 +34,6 @@ alias la='ls -ahA --color=always'
 
 
 # Terminal coloring
-tput setab 233
 BLUE="$(tput setaf 62)"
 GREEN="$(tput setaf 83)"
 RED="$(tput setaf 196)"
