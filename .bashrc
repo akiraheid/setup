@@ -34,16 +34,38 @@ alias la='ls -ahA --color=always'
 
 
 # Terminal coloring
+NORM="$(tput sgr 0)"
 BLUE="$(tput setaf 62)"
+CYAN="$(tput setaf 65)"
 GREEN="$(tput setaf 83)"
 RED="$(tput setaf 196)"
 WHITE="$(tput setaf 253)"
-USERNAME=${GREEN}
-AT=${RED}
-HOST=${BLUE}
-CUR_DIR=${RED}
 
-export PS1="\[${USERNAME}\]\u\[${AT}\]@\[${HOST}\]\h \[${CUR_DIR}\]\w\n\[${WHITE}\]> "
+USERNAME_COLOR=${GREEN}
+AT_COLOR=${RED}
+HOST_COLOR=${BLUE}
+CUR_DIR_COLOR=${RED}
+
+# Version control logic
+GIT_BRANCH="git rev-parse --abbrev-ref HEAD 2>/dev/null"
+INFO=${GIT_BRANCH}
+INFO_COLOR=${GREEN}
+
+if [[ `date +%m%d` == 0704 ]]; then # Fourth of July
+  USERNAME=${RED}
+  AT=${WHITE}
+  HOST=${CYAN}
+  CUR_DIR=${CYAN}
+  INFO_COLOR=${RED}
+elif [[ `date +%m%d` == 1225 ]]; then # Christmas
+  USERNAME=${GREEN}
+  AT=${WHITE}
+  HOST=${RED}
+  CUR_DIR=${GREEN}
+  INFO_COLOR=${RED}
+fi
+
+export PS1="\[${USERNAME_COLOR}\]\u\[${AT_COLOR}\]@\[${HOST_COLOR}\]\h \[${WHITE}\][\[${CUR_DIR_COLOR}\]\w\[${WHITE}\]] (\[${INFO_COLOR}\]\`${INFO}\`\[${WHITE}\])\n\[${NORM}\]> "
 
 
 
