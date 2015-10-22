@@ -21,13 +21,13 @@ set complete-=i " Keyword completion. Used with C-P or C-N.
                 "  t Tag completion
                 " Removed:
                 "  i Current and included files
-set display+=lastline, uhex " The way text is displayed.
-                            " Default:
-                            " Add:
-                            "  lastline Display as much of the last line as
-                            "           possible instead of @ symbols.
-                            "  uhex Display unprintable characters as <xx>
-                            "  instead of ^C and ~C.
+set display+=lastline " The way text is displayed.
+set display+=uhex     " Default:
+                      " Add:
+                      "  lastline Display as much of the last line as
+                      "           possible instead of @ symbols.
+                      "  uhex Display unprintable characters as <xx>
+                      "  instead of ^C and ~C.
 set equalalways " Split windows are always equal size
 set expandtab " In Insert mode, use the appropriate number of spaces to
               " insert a tab.

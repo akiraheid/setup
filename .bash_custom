@@ -1,4 +1,4 @@
-# .bashrc
+# .bash_custom
 
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
@@ -16,20 +16,22 @@ shopt -s checkwinsize
 
 
 
-# Custom setup stuff. Change this directory to wherever you clone the git repo to
-SETUP_DIR=~/code/setup
-
-# Up directory script
+# Script
+SETUP_DIR="$( dirname "${BASH_SOURCE[0]}" )"
 . ${SETUP_DIR}/bin/ud
-alias u='ud'
+. ${SETUP_DIR}/bin/mkcd
 
 
 
 # Aliases
 alias cp='cp -p'
-alias ls='ls -F --color=always'
-alias ll='ls -lhA --color=always'
-alias la='ls -ahA --color=always'
+alias la='ls -aA'
+alias ll='ls -lhA'
+alias lR='ls -RF'
+alias ls='ls -F'
+alias gs='git status'
+alias u='ud'
+alias v='vim'
 
 
 
@@ -67,13 +69,3 @@ fi
 
 export PS1="\[${USERNAME_COLOR}\]\u\[${AT_COLOR}\]@\[${HOST_COLOR}\]\h \[${WHITE}\][\[${CUR_DIR_COLOR}\]\w\[${WHITE}\]] (\[${INFO_COLOR}\]\`${INFO}\`\[${WHITE}\])\n\[${NORM}\]> "
 
-
-
-# Functions
-
-# Make a directory and change into it
-function mkcd
-{
-  mkdir -p $1
-  cd $1
-}
