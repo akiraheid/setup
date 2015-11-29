@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Create a directory and change into it.
+#
+# This file must be sourced in your .bashrc as follows:
+#    . /path/to/mkcd
+#
+# USAGE
+#   mkcd dirname
+#
+# dirname The name of the directory to create and change into.
+#
+
+function mkcd() {
+  mkdir -p $1 && cd $1
+}

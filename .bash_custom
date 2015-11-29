@@ -30,6 +30,7 @@ alias ll='ls -lhA'
 alias lR='ls -RF'
 alias ls='ls -F'
 alias gs='git status'
+alias screen='screen -dR'
 alias u='ud'
 alias v='vim'
 
