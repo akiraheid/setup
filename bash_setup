@@ -20,7 +20,7 @@ shopt -s checkwinsize
 SETUP_DIR="$( dirname "${BASH_SOURCE[0]}" )"
 . ${SETUP_DIR}/bin/ud
 . ${SETUP_DIR}/bin/mkcd
-
+. ${SETUP_DIR}/bin/topme
 
 
 # Aliases
@@ -48,25 +48,30 @@ USERNAME_COLOR=${GREEN}
 AT_COLOR=${RED}
 HOST_COLOR=${BLUE}
 CUR_DIR_COLOR=${RED}
+VC_COLOR=${GREEN}
 
 # Version control logic
 GIT_BRANCH="git rev-parse --abbrev-ref HEAD 2>/dev/null"
-INFO=${GIT_BRANCH}
-INFO_COLOR=${GREEN}
+VC_COMMANDS=(${GIT_BRANCH})
+
+function getVersion() {
+  VC=${GIT_BRANCH}
+}
 
 if [[ `date +%m%d` == 0704 ]]; then # Fourth of July
   USERNAME=${RED}
   AT=${WHITE}
   HOST=${CYAN}
   CUR_DIR=${CYAN}
-  INFO_COLOR=${RED}
+  VC_COLOR=${RED}
 elif [[ `date +%m%d` == 1225 ]]; then # Christmas
   USERNAME=${GREEN}
   AT=${WHITE}
   HOST=${RED}
   CUR_DIR=${GREEN}
-  INFO_COLOR=${RED}
+  VC_COLOR=${RED}
 fi
 
-export PS1="\[${USERNAME_COLOR}\]\u\[${AT_COLOR}\]@\[${HOST_COLOR}\]\h \[${WHITE}\][\[${CUR_DIR_COLOR}\]\w\[${WHITE}\]] (\[${INFO_COLOR}\]\`${INFO}\`\[${WHITE}\])\n\[${NORM}\]> "
+PROMPT_COMMAND="getVersion"
+export PS1="\[${USERNAME_COLOR}\]\u\[${AT_COLOR}\]@\[${HOST_COLOR}\]\h \[${WHITE}\][\[${CUR_DIR_COLOR}\]\w\[${WHITE}\]] (\[${VC_COLOR}\]\`${VC}\`\[${WHITE}\])\n\[${NORM}\]> "
 
