@@ -35,12 +35,12 @@ alias u='ud'
 alias v='vim'
 
 
-
 # Terminal coloring
 NORM="$(tput sgr 0)"
 BLUE="$(tput setaf 62)"
 CYAN="$(tput setaf 65)"
 GREEN="$(tput setaf 83)"
+ORANGE="$(tput setaf 220)"
 RED="$(tput setaf 196)"
 WHITE="$(tput setaf 253)"
 
@@ -48,30 +48,45 @@ USERNAME_COLOR=${GREEN}
 AT_COLOR=${RED}
 HOST_COLOR=${BLUE}
 CUR_DIR_COLOR=${RED}
-VC_COLOR=${GREEN}
+VC_TYPE_COLOR=${ORANGE}
+VC_INFO_COLOR=${RED}
 
 # Version control logic
-GIT_BRANCH="git rev-parse --abbrev-ref HEAD 2>/dev/null"
-VC_COMMANDS=(${GIT_BRANCH})
-
-function getVersion() {
-  VC=${GIT_BRANCH}
+function getGitBranch {
+  git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 
-if [[ `date +%m%d` == 0704 ]]; then # Fourth of July
-  USERNAME=${RED}
-  AT=${WHITE}
-  HOST=${CYAN}
-  CUR_DIR=${CYAN}
-  VC_COLOR=${RED}
-elif [[ `date +%m%d` == 1225 ]]; then # Christmas
-  USERNAME=${GREEN}
-  AT=${WHITE}
-  HOST=${RED}
-  CUR_DIR=${GREEN}
-  VC_COLOR=${RED}
-fi
+function getInfo {
+  DELIM="|"
+  VC_INFO="`getGitBranch`"
+  if [ "$VC_INFO" ]; then
+    VC_TYPE="Git"
+  else
+    DELIM=""
+    VC_INFO=""
+    VC_TYPE=""
+  fi
+  echo "(\[${VC_TYPE_COLOR}\]${VC_TYPE}\[${WHITE}\]${DELIM}\[${VC_INFO_COLOR}\]${VC_INFO}\[${WHITE}\])\n"
+}
 
-PROMPT_COMMAND="getVersion"
-export PS1="\[${USERNAME_COLOR}\]\u\[${AT_COLOR}\]@\[${HOST_COLOR}\]\h \[${WHITE}\][\[${CUR_DIR_COLOR}\]\w\[${WHITE}\]] (\[${VC_COLOR}\]\`${VC}\`\[${WHITE}\])\n\[${NORM}\]> "
+function updatePS1 {
+  if [[ `date +%m%d` == 0704 ]]; then # Fourth of July
+    USERNAME=${RED}
+    AT=${WHITE}
+    HOST=${CYAN}
+    CUR_DIR=${CYAN}
+    VC_COLOR=${RED}
+  elif [[ `date +%m%d` == 1225 ]]; then # Christmas
+    USERNAME=${GREEN}
+    AT=${WHITE}
+    HOST=${RED}
+    CUR_DIR=${GREEN}
+    VC_COLOR=${RED}
+  fi
 
+  export PS1="\[${USERNAME_COLOR}\]\u\[${AT_COLOR}\]@\[${HOST_COLOR}\]\h \[${WHITE}\][\[${CUR_DIR_COLOR}\]\w\[${WHITE}\]] `getInfo`\[${NORM}\]> "
+}
+
+PROMPT_COMMAND="updatePS1"
+
+updatePS1
