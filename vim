@@ -12,6 +12,7 @@ set autoindent " Copy indent from current line when starting a new line
 set autoread " Automatically read in the file again if it changes outside
              " vim.
 set background=dark " Use colors good on a dark background
+set colorcolumn=81 " Highlight the column
 set complete-=i " Keyword completion. Used with C-P or C-N.
                 " Default:
                 "  . Current buffer
@@ -48,6 +49,7 @@ set showmode " Put a mode message in the last line
 set smarttab " In front of a line, insert 'shiftwidth' blanks.
 set splitbelow " Put horizontal split window below of the current one
 set splitright " Put vertical split window right of the current one
+set t_Co=256 " 256 color setting
 set tabstop=2 " Number of spaces in a tab
 set textwidth=0 " Maximum numbers of characters in a line (breaks at
                 " whitespace to get this length.
@@ -55,6 +57,13 @@ set ttimeout " Timeout on :mappings and keycodes
 set ttimeoutlen=100 " Duration before timeout.
 set wildmenu " Pressing 'wildchar' (<Tab>) to invoke completion shows
              " possible matches.
+
+" Match commands
+:match ErrorMsg '\s\+$' " Trailing whitespace
+
+" Highlights
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
+highligh CursorLine ctermbg=235 guibg=#2c2d27
 
 " Buffer navigation shortcuts
 noremap <Tab> :bn<CR>
