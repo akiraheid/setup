@@ -1,1 +1,8 @@
+# VIM files
 *.sw*
+
+# Backup files
+*.bak
+
+# Log files
+*.log
