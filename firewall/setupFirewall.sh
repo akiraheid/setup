@@ -14,14 +14,14 @@
 # Any address/port
 UNIVERSE="0.0.0.0/0"
 
-# Allowed internal ports
-INTPRT="1024:65535"
+# Allowed "any" ports
+ANYPORTS="1024:65535"
 
 # The internal interface designation
-INTIF="eth0"
+INTERFACE="eth0"
 
 # Internal interface IP address
-INTIP=`hostname -I`
+MYIP=`hostname -I`
 
 echo "Storing backup..."
 iptables -L -v > iptables.bak
@@ -47,31 +47,49 @@ echo "Allowing unlimited traffic on loopback..."
 iptables -A INPUT -i lo -s $UNIVERSE -d $UNIVERSE -j ACCEPT
 iptables -A OUPTUT -o lo -s $UNIVERSE -d $UNIVERSE -j ACCEPT
 
-echo "Creating rules for TCP ports..."
+# Ports to have open if client
+echo "Creating rules for TCP ports as client..."
 TCP_PORTS="443"
 for PORT in $TCP_PORTS
 do
-  echo "  Allowing TCP INPUT/OUTPUT for port ${PORT}..."
-  iptables -A INPUT -i $INTIF -p tcp -s $UNIVERSE --sport $PORT -d $INTIP --dport $INTPRT -j ACCEPT
-  #iptables -A INPUT -i $INTIF -p tcp -s $UNIVERSE --sport $PORT -d $INTIP --dport $INTPRT -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -o $INTIF -p tcp -s $INTIP --sport $INTPRT -d $UNIVERSE --dport $PORT -j ACCEPT
-  #iptables -A OUTPUT -o $INTIF -p tcp -s $INTIP --sport $INTPRT -d $UNIVERSE --dport $PORT -m state --state ESTABLISHED -j ACCEPT
+  echo "  Allowing TCP INPUT/OUTPUT as client for port ${PORT}..."
+  iptables -A INPUT -i $INTERFACE -p tcp -s $UNIVERSE --sport $PORT -d $MYIP --dport $ANYPORTS -j ACCEPT
+  iptables -A OUTPUT -o $INTERFACE -p tcp -s $MYIP --sport $ANYPORTS -d $UNIVERSE --dport $PORT -j ACCEPT
+done
+
+# Ports to have open if hosting
+# This is where you would open 22 to act as an SSH server
+echo "Creating rules for TCP ports as host for port ${PORT}..."
+TCP_PORTS=""
+for PORT in $TCP_PORTS
+do
+  echo "  Allowing TCP INPUT/OUTPUT as host for port ${PORT}..."
+  iptables -A INPUT -i $INTERFACE -p tcp -s $UNIVERSE --sport $ANYPORTS -d $MYIP --dport $PORT -j ACCEPT
+  iptables -A OUTPUT -o $INTERFACE -p tcp -s $MYIP --sport $PORT -d $UNIVERSE --dport $ANYPORTS -j ACCEPT
 done
 
 echo "Creating rules for UDP ports..."
 UDP_PORTS="53"
 for PORT in $UDP_PORTS
 do
-  echo "  Allowing UDP INPUT/OUTPUT for port ${PORT}..."
-  iptables -A INPUT -i $INTIF -p udp -s $UNIVERSE --sport $PORT -d $INTIP --dport $INTPRT -j ACCEPT
-  #iptables -A INPUT -i $INTIF -p udp -s $UNIVERSE --sport $PORT -d $INTIP --dport $INTPRT -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -o $INTIF -p udp -s $INTIP --sport $INTPRT -d $UNIVERSE --dport $PORT -j ACCEPT
-  #iptables -A OUTPUT -o $INTIF -p udp -s $INTIP --sport $INTPRT -d $UNIVERSE --dport $PORT -m state --state ESTABLISHED -j ACCEPT
+  echo "  Allowing UDP INPUT/OUTPUT as client for port ${PORT}..."
+  iptables -A INPUT -i $INTERFACE -p udp -s $UNIVERSE --sport $PORT -d $MYIP --dport $ANYPORTS -j ACCEPT
+  iptables -A OUTPUT -o $INTERFACE -p udp -s $MYIP --sport $ANYPORTS -d $UNIVERSE --dport $PORT -j ACCEPT
+done
+
+echo "Creating rules for UDP ports..."
+# This is where you would open a port to act as a UDP server
+UDP_PORTS=""
+for PORT in $UDP_PORTS
+do
+  echo "  Allowing UDP INPUT/OUTPUT as host for port ${PORT}..."
+  iptables -A INPUT -i $INTERFACE -p udp -s $UNIVERSE --sport $ANYPORTS -d $MYIP --dport $PORT -j ACCEPT
+  iptables -A OUTPUT -o $INTERFACE -p udp -s $MYIP --sport $PORT -d $UNIVERSE --dport $ANYPORTS -j ACCEPT
 done
 
 echo "Blocking all other ports..."
-iptables -A INPUT -i $INTIF -s $UNIVERSE -d $UNIVERSE -j drop-and-log
-iptables -A OUTPUT -o $INTIF -s $UNIVERSE -d $UNIVERSE -j drop-and-log
-iptables -A FORWARD -i $INTIF -j drop-and-log
+iptables -A INPUT -i $INTERFACE -s $UNIVERSE -d $UNIVERSE -j drop-and-log
+iptables -A OUTPUT -o $INTERFACE -s $UNIVERSE -d $UNIVERSE -j drop-and-log
+iptables -A FORWARD -i $INTERFACE -j drop-and-log
 
 echo "Done!"
