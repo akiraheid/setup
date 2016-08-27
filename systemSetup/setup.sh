@@ -12,7 +12,8 @@ echo "== Dist-upgrading"
 yes | apt-get dist-upgrade
 
 echo "== Installing dev packages"
-yes | apt-get install clang cmake cppcheck curl git vim
+yes | apt-get install clang cmake cppcheck curl git vim nodejs
+ln -s /usr/bin/nodejs /usr/bin/node
 
 echo "== Autoremove"
 yes | apt-get autoremove
@@ -32,3 +33,5 @@ if [ ! -d $VIM_BUNDLE_DIR/syntastic ]; then
   echo "==== Syntastic not found. Installing"
   git clone --depth=1 https://github.com/scrooloose/syntastic.git $VIM_BUNDLE_DIR/syntastic
 fi
+
+echo "== Done"
