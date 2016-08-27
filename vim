@@ -58,6 +58,18 @@ set ttimeoutlen=100 " Duration before timeout.
 set wildmenu " Pressing 'wildchar' (<Tab>) to invoke completion shows
              " possible matches.
 
+
+" Syntastic stuff
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 " Match commands
 :match ErrorMsg '\s\+$' " Trailing whitespace
 
