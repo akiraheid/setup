@@ -8,12 +8,8 @@ yes | apt-get update
 echo "== Upgrading"
 yes | apt-get upgrade
 
-echo "== Dist-upgrading"
-yes | apt-get dist-upgrade
-
 echo "== Installing dev packages"
 yes | apt-get install clang cmake cppcheck curl git vim nodejs
-ln -s /usr/bin/nodejs /usr/bin/node
 
 echo "== Autoremove"
 yes | apt-get autoremove
