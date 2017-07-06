@@ -12,7 +12,7 @@ echo "== Autoremove"
 echo 'y' | apt-get autoremove
 
 echo "== Installing dev packages"
-echo 'y' | apt-get install clang cmake cppcheck curl git vim nodejs npm
+echo 'y' | apt-get install clang cmake cppcheck curl git vim
 
 echo "== Autoremove"
 echo 'y' | apt-get autoremove
