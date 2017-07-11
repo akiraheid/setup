@@ -3,19 +3,19 @@
 # Perform dev-system set up.
 
 echo "== Updating"
-echo 'y' | apt-get update
+apt-get -y update
 
 echo "== Upgrading"
-echo 'y' | apt-get upgrade
+apt-get -y upgrade
 
 echo "== Autoremove"
-echo 'y' | apt-get autoremove
+apt-get -y autoremove
 
 echo "== Installing dev packages"
-echo 'y' | apt-get install clang cmake cppcheck curl git vim
+apt-get -y install clang cmake cppcheck curl git vim
 
 echo "== Autoremove"
-echo 'y' | apt-get autoremove
+apt-get -y autoremove
 
 echo "== Checking for pathogen..."
 VIM_BUNDLE_DIR=~/.vim/bundle
