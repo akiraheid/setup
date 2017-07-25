@@ -38,6 +38,7 @@ alias v='vim'
 
 
 # Terminal coloring (assuming 256 colors)
+TERM=xterm-256color
 NORM="$(tput sgr 0)"
 BLUE="$(tput setaf 62)"
 CYAN="$(tput setaf 65)"
@@ -68,7 +69,7 @@ function getInfo {
     VC_INFO=""
     VC_TYPE=""
   fi
-  echo "(\[${VC_TYPE_COLOR}\]${VC_TYPE}\[${WHITE}\]${DELIM}\[${VC_INFO_COLOR}\]${VC_INFO}\[${WHITE}\])\n"
+  echo "(\[${VC_INFO_COLOR}\]${VC_INFO}\[${WHITE}\])\n"
 }
 
 function updatePS1 {
