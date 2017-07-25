@@ -2,35 +2,53 @@
 
 # Perform dev-system set up.
 
+if [ -z "${SETUP_DIR}" ]; then
+  read -p "What is the path to the setup repo?" path
+  SETUP_DIR=$(readlink -f ${path})
+  echo "Using ${SETUP_DIR} as repo path"
+fi
+
 echo "== Updating"
-apt-get -y update
+sudo apt-get -y update
 
 echo "== Upgrading"
-apt-get -y upgrade
+sudo apt-get -y upgrade
 
 echo "== Autoremove"
-apt-get -y autoremove
+sudo apt-get -y autoremove
 
 echo "== Installing dev packages"
-apt-get -y install clang cmake cppcheck curl git vim
+sudo apt-get -y install clang cmake cppcheck curl git vim
 
 echo "== Autoremove"
-apt-get -y autoremove
+sudo apt-get -y autoremove
 
 echo "== Checking for pathogen..."
 VIM_BUNDLE_DIR=~/.vim/bundle
 if [ ! -f ~/.vim/autoload/pathogen.vim ]; then
   echo "==== Pathogen not found. Installing"
-  mkdir -p ~/.vim/autoload $VIM_BUNDLE_DIR
+  mkdir -p ~/.vim/autoload ${VIM_BUNDLE_DIR}
   curl https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim -o ~/.vim/autoload/pathogen.vim
 else
   echo "==== Pathogen already installed"
 fi
 
 echo "== Installing vim packages..."
-if [ ! -d $VIM_BUNDLE_DIR/syntastic ]; then
+if [ ! -d "${VIM_BUNDLE_DIR}/syntastic" ]; then
   echo "==== Syntastic not found. Installing"
   git clone --depth=1 https://github.com/scrooloose/syntastic.git $VIM_BUNDLE_DIR/syntastic
 fi
+
+echo "== Installing .bashrc..."
+BASHRC=~/.bashrc
+cp "${BASHRC}" "${BASHRC}.bak" >/dev/null 2>&1
+rm "${BASHRC}" 2&>1
+ln -s "${SETUP_DIR}/bashrc" "${BASHRC}"
+
+echo "== Installing .vimrc"
+VIMRC=~/.vimrc
+cp "${VIMRC}" "${VIMRC}.bak" >/dev/null 2>&1
+rm "${VIMRC}" 2&>1
+ln -s "${SETUP_DIR}/vimrc" "${VIMRC}"
 
 echo "== Done"
