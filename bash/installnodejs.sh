@@ -15,8 +15,8 @@ SHR_DIR="${HOME_DIR}/share"
 
 mkdir -p ${TMP_DIR} ${LIB_DIR} ${BIN_DIR} ${INC_DIR} ${SHR_DIR}
 cd ${TMP_DIR}
-#wget ${NODE_URL}/${PACKAGE}.tar.gz
-#tar -xzf ${PACKAGE}
+wget ${NODE_URL}/${PACKAGE}.tar.gz
+tar -xzf ${PACKAGE}
 
 cp -r ${PACKAGE}/bin/* ${BIN_DIR}/
 cp -r ${PACKAGE}/lib/* ${LIB_DIR}/
