@@ -31,10 +31,18 @@ alias ll='ls -lhA'
 alias lR='ls -RF'
 alias ls='ls -F'
 alias gs='git status'
-alias screen='screen -dR'
 alias topme="top -u `whoami`"
 alias u='ud'
 alias v='vim'
+
+
+# Update PATH
+PATH="${PATH}:${HOME}/bin:${HOME}/lib:${HOME}/share"
+
+# Remove duplicates
+PATH=$(echo "$PATH" | awk -v RS=":" -v ORS=":" '!a[$1]++{if (NR>1) printf ORS; printf $a[$1]}')
+
+export PATH=$PATH
 
 
 # Terminal coloring (assuming 256 colors)
