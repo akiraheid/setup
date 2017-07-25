@@ -20,8 +20,8 @@ shopt -s checkwinsize
 
 # Setup repo scripts
 SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
-. ${SETUP_DIR}/bin/ud
-. ${SETUP_DIR}/bin/mkcd
+. ${SETUP_DIR}/bash/ud
+. ${SETUP_DIR}/bash/mkcd
 
 
 # Aliases
