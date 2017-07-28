@@ -1,4 +1,3 @@
-# .bash_setup
 #
 # This file should be left in the repository and a symlink with the name
 # ".bashrc" should be created in the user directory and point to this file.
@@ -37,7 +36,12 @@ alias v='vim'
 
 
 # Update PATH
-PATH="${PATH}:${HOME}/bin:${HOME}/lib:${HOME}/share"
+if [ -f ${HOME}/.path ]; then
+  while read -r line
+  do
+    PATH="${PATH}:$line"
+  done < ${HOME}/.path
+fi
 
 # Remove duplicates
 PATH=$(echo "$PATH" | awk -v RS=":" -v ORS=":" '!a[$1]++{if (NR>1) printf ORS; printf $a[$1]}')
