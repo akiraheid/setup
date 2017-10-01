@@ -23,13 +23,20 @@ SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
 . ${SETUP_DIR}/bash/mkcd
 
 
+# Default editor
+EDITOR=vim
+
 # Aliases
 alias cp='cp -p'
+alias gs='git status'
+alias iba='ionic cordova build android'
+alias iea='ionic cordova emulate android'
 alias la='ls -aA'
 alias ll='ls -lhA'
 alias lR='ls -RF'
 alias ls='ls -F'
-alias gs='git status'
+alias sf='grep --line-number --recursive --directories=recurse'
+alias sff='grep --files-with-matches --recursive --directories=recurse'
 alias topme="top -u `whoami`"
 alias u='ud'
 alias v='vim'
