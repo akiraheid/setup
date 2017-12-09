@@ -29,4 +29,5 @@ echo ${BIN_DIR} >> ${HOME}/.path
 echo ${INC_DIR} >> ${HOME}/.path
 echo ${SHR_DIR} >> ${HOME}/.path
 
+cd ${HOME_DIR}
 rm -r ${TMP_DIR}

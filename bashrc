@@ -24,7 +24,7 @@ SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
 
 
 # Default editor
-EDITOR=vim
+export EDITOR=vim
 
 # Aliases
 alias cp='cp -p'
