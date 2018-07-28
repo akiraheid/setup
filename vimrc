@@ -23,6 +23,7 @@ set complete-=i " Keyword completion. Used with C-P or C-N.
                 " Removed:
                 "  i Current and included files
 set display+=lastline
+set display+=uhex
 set equalalways " Split windows are always equal size
 set hlsearch incsearch
 set laststatus=2
