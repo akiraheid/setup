@@ -39,7 +39,7 @@ set wildmenu
 set ruler showcmd statusline=%f\ %r%m%=%c,%l\ %p\%%
 
 " Spaces > tabs
-set expandtab shiftwidth=2 softtabstop=2 smarttab
+set expandtab shiftwidth=4 softtabstop=4 smarttab
 
 " Syntastic stuff
 set statusline+=%#warningmsg#
