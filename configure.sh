@@ -5,6 +5,7 @@
 HOME=$(readlink -f ~)
 VIM_BUNDLE_DIR=~/.vim/bundle
 REPO_DIR="${HOME}/repos"
+TOR_URL="https://www.torproject.org/dist/torbrowser/8.0.1/tor-browser-linux64-8.0.1_en-US.tar.xz"
 
 function updateSystem() {
     echo "== Updating"
@@ -88,12 +89,31 @@ function installDocker() {
     sudo docker run hello-world
 }
 
+function installTor() {
+    ZIPPED_TOR="~/tmp/tor-browser-8.0.1.tar.xz"
+    UNZIPPED_TOR="~/Download/tor-browser"
+    echo "== Installing Tor"
+    mkdir -p $UNZIPPED_TOR "~/tmp"
+    sudo apt-get install -y curl
+    curl -o $ZIPPED_TOR $TOR_URL
+    tar -xzf $ZIPPED_TOR $UNZIPPED_TOR
+    rm $ZIPPED_TOR
+}
+
+function installnpm() {
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    sudo apt-get install -y nodejs g++ gcc make
+}
+
 # Comment out options as desired
 echo "== Beginning configuration"
 updateSystem
 cloneSetup
 installpathogen
+installSyntastic
 installbashrc
 installvimrc
-installDocker
+#installDocker
+installTor
+installnpm
 echo "== Done"
