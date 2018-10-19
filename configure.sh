@@ -24,7 +24,7 @@ function updateSystem() {
     sudo apt-get -y autoremove
 }
 
-function installPathogen() {
+function installpathogen() {
     echo "== Checking for pathogen..."
     if [ ! -f ~/.vim/autoload/pathogen.vim ]; then
         echo "=== Pathogen not found. Installing"
