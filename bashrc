@@ -16,6 +16,9 @@ HISTFILESIZE=2000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+if [ -z $TERM ]; then
+    TERM=xterm-256color
+fi
 
 # Setup repo scripts
 SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
