@@ -1,6 +1,10 @@
-#
 # This file should be left in the repository and a symlink with the name
 # ".bashrc" should be created in the user directory and point to this file.
+
+# Remove duplicates
+TMP_PATH=$(echo "$PATH" | awk -v RS=":" -v ORS=":" '!a[$1]++{if (NR>1) printf ORS; printf $a[$1]}')
+
+export PATH=$TMP_PATH
 
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
@@ -16,47 +20,18 @@ HISTFILESIZE=2000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# Default editor
+export EDITOR=vim
+
 if [ -z $TERM ]; then
     TERM=xterm-256color
 fi
 
 # Setup repo scripts
 SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
-. ${SETUP_DIR}/bash/ud
-. ${SETUP_DIR}/bash/mkcd
-
-
-# Default editor
-export EDITOR=vim
-
-# Aliases
-alias cp='cp -p'
-alias gs='git status'
-alias iba='ionic cordova build android'
-alias iea='ionic cordova emulate android'
-alias la='ls -aA'
-alias ll='ls -lhA'
-alias lR='ls -RF'
-alias ls='ls -F'
-alias sf='grep --line-number --recursive --directories=recurse'
-alias sff='grep --files-with-matches --recursive --directories=recurse'
-alias topme="top -u `whoami`"
-alias u='ud'
-alias v='vim'
-
-
-# Update PATH
-if [ -f ${HOME}/.path ]; then
-  while read -r line
-  do
-    PATH="${PATH}:$line"
-  done < ${HOME}/.path
-fi
-
-# Remove duplicates
-PATH=$(echo "$PATH" | awk -v RS=":" -v ORS=":" '!a[$1]++{if (NR>1) printf ORS; printf $a[$1]}')
-
-export PATH=$PATH
+. ${SETUP_DIR}/ud
+. ${SETUP_DIR}/mkcd
+. ${SETUP_DIR}/aliases
 
 
 # Terminal coloring (assuming 256 colors)
@@ -84,14 +59,7 @@ function getGitBranch {
 function getInfo {
   DELIM="|"
   VC_INFO="`getGitBranch`"
-  if [ "$VC_INFO" ]; then
-    VC_TYPE="Git"
-  else
-    DELIM=""
-    VC_INFO=""
-    VC_TYPE=""
-  fi
-  echo "(\[${VC_INFO_COLOR}\]${VC_INFO}\[${WHITE}\])\n"
+  echo "\[${VC_INFO_COLOR}\]${VC_INFO}\[${WHITE}\]\n"
 }
 
 function updatePS1 {
