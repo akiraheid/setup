@@ -15,7 +15,7 @@ function _backupInstall() {
 	THING="${HOME}/$1"
 	BACKUP="${HOME}/$1.bak-${DATE}"
 	echo "Installing ${SETUP}..."
-	if [ -e ${THING} ]; then
+	if [[ -e ${THING} || -h ${THING} ]]; then
 		echo "  ${THING} exists. Creating backup: ${BACKUP}"
 		cp ${THING} ${BACKUP} > /dev/null 2>&1
 		rm ${THING}
