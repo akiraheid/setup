@@ -64,7 +64,3 @@ highligh CursorLine ctermbg=235 guibg=#2c2d27
 " Buffer navigation shortcuts
 noremap <Tab> :bn<CR>
 noremap <S-Tab> :bp<CR>
-
-" Tab navigation shortcuts
-noremap <C-Tab> :tabn<CR>
-noremap <C-S-Tab> :tabp<CR>
