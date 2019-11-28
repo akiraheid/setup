@@ -1,4 +1,5 @@
 alias cp='cp -p'
+alias gfrom='git fetch; git rebase origin/master'
 alias gs='git status'
 alias iba='ionic cordova build android'
 alias iea='ionic cordova emulate android'
