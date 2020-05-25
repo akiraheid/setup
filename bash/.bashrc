@@ -1,6 +1,8 @@
 # This file should be left in the repository and a symlink with the name
 # ".bashrc" should be created in the user directory and point to this file.
 
+. ~/.defaults
+
 # Remove duplicates
 TMP_PATH=$(echo "$PATH" | awk -v RS=":" -v ORS=":" '!a[$1]++{if (NR>1) printf ORS; printf $a[$1]}')
 
@@ -32,6 +34,7 @@ SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
 . ${SETUP_DIR}/ud
 . ${SETUP_DIR}/mkcd
 . ${SETUP_DIR}/aliases
+. ${SETUP_DIR}/functions
 
 
 # Terminal coloring (assuming 256 colors)

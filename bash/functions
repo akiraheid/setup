@@ -1,0 +1,7 @@
+function wttr() {
+	# Suggest ~/.default to contain "default_loc" defined
+	loc=${default_loc-poop}
+	tmp="wttr.in/${1-${loc}}?m&1&2&F"
+	[ "$(tput cols)" -lt 125 ] && request+="&n"
+	curl -H "Accept-Language: ${LANG%_*}" --compressed "$tmp" -o ~/tmp/wttr
+}
