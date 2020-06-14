@@ -7,6 +7,8 @@ alias la='ls -aA'
 alias ll='ls -lhA'
 alias lR='ls -RF'
 alias ls='ls -F'
+alias python='python3.8'
+alias pip='pip3'
 alias sf='grep --line-number --recursive --directories=recurse'
 alias sff='grep --files-with-matches --recursive --directories=recurse'
 alias topme="top -u `whoami`"

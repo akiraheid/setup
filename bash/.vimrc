@@ -1,27 +1,31 @@
 execute pathogen#infect()
 
 if has('autocmd')
-    filetype plugin indent on
+	filetype plugin indent on
 endif
 
 if has('syntax') && !exists('g:syntax_on')
-    syntax enable
+	syntax enable
 endif
 
-set autoindent " Copy indent from current line when starting a new line
-set autoread " Automatically read in the file again if it changes outside
-             " vim.
+" Automatically read in the file again if it changes outside
+" vim.
+set autoread
+
 set background=dark " Use colors good on a dark background
 set colorcolumn=81 " Highlight the column
-set complete-=i " Keyword completion. Used with C-P or C-N.
-                " Default:
-                "  . Current buffer
-                "  w Buffers from other windows
-                "  b Other loaded buffers in the buffer list
-                "  u Unloaded buffers in the buffer list
-                "  t Tag completion
-                " Removed:
-                "  i Current and included files
+
+" Keyword completion. Used with C-P or C-N.
+" Default:
+"  . Current buffer
+"  w Buffers from other windows
+"  b Other loaded buffers in the buffer list
+"  u Unloaded buffers in the buffer list
+"  t Tag completion
+" Removed:
+"  i Current and included files
+set complete-=i
+
 set display+=lastline
 set display+=uhex
 set equalalways " Split windows are always equal size
@@ -39,7 +43,13 @@ set wildmenu
 set ruler showcmd statusline=%f\ %r%m%=%c,%l\ %p\%%
 
 " Tabs > space
-set autoindent noexpandtab tabstop=4 shiftwidth=4 smarttab
+set autoindent
+set noexpandtab " Use only tabs
+set nosmarttab " Disable inserting spaces instead of tabs
+set shiftwidth=4
+set smartindent
+set softtabstop=0 " Disable fill with spaces
+set tabstop=4
 
 " Syntastic stuff
 set statusline+=%#warningmsg#
