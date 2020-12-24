@@ -1,4 +1,7 @@
 function wttr() {
+	if [ -f ~/.defaults ]; then
+		. ~/.defaults
+	fi
 	# Suggest ~/.defaults to contain "default_loc" defined
 	loc=${default_loc-poop}
 	tmp="wttr.in/${1-${loc}}?m&1&2&F"
