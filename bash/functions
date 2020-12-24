@@ -1,3 +1,39 @@
+# Utility functions
+
+# Return if the given binary exists in the PATH
+function has() {
+	if [ -z "`which $1`" ]; then
+		echo false
+	fi
+	echo true
+}
+
+# Control syncthing container
+function syncthing() {
+	DIR=~/syncthing
+	mkdir -p $DIR
+
+	if [ `has podman` == true ]; then
+		CONTROLLER=podman
+	elif [ `has docker` == true ]; then
+		CONTROLLER=docker
+	else
+		return 1
+	fi
+
+	# normally runs with port mappings -p 8384:8384 -p 22000:22000 but using
+	# --network=host eliminates the need to specify the mappings
+	$CONTROLLER run --detach --rm \
+		--env PUID="`id -u`" \
+		--env PGID="`id -g`" \
+		--env STGUIADDRESS="" \
+		--name syncthing \
+		--network=host \
+		--userns=keep-id \
+		--volume $DIR/:/var/syncthing/ \
+		syncthing/syncthing:latest
+}
+
 function wttr() {
 	if [ -f ~/.defaults ]; then
 		. ~/.defaults
