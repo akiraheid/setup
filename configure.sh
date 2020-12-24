@@ -20,6 +20,8 @@ options=(1 "bashrc" off
 	2 "vim" off
 	3 "pathogen" off
 	4 "syntastic" off
+	5 "podman" off
+	6 "tmux" off
 	)
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -58,6 +60,12 @@ do
 			;;
 		4)
 			(. ${SETUP_DIR}/bash/installsyntastic.sh)
+			;;
+		5)
+			(. ${SETUP_DIR}/bash/installpodman.sh)
+			;;
+		6)
+			(. ${SETUP_DIR}/bash/installtmux.sh)
 			;;
 	esac
 done
