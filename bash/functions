@@ -13,17 +13,14 @@ function syncthing() {
 	DIR=~/syncthing
 	mkdir -p $DIR
 
-	if [ `has podman` == true ]; then
-		CONTROLLER=podman
-	elif [ `has docker` == true ]; then
-		CONTROLLER=docker
-	else
+	if [ `has podman` != true ]; then
+		echo "Need podman to run syncthing. Exiting."
 		return 1
 	fi
 
 	# normally runs with port mappings -p 8384:8384 -p 22000:22000 but using
 	# --network=host eliminates the need to specify the mappings
-	$CONTROLLER run --detach --rm \
+	podman run --detach --rm \
 		--env PUID="`id -u`" \
 		--env PGID="`id -g`" \
 		--env STGUIADDRESS="" \
