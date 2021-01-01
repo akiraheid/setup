@@ -33,6 +33,7 @@ SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
 . ${SETUP_DIR}/mkcd
 . ${SETUP_DIR}/aliases
 . ${SETUP_DIR}/functions
+. ${SETUP_DIR}/podmanfuncs.sh
 
 
 # Terminal coloring (assuming 256 colors)
