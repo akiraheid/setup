@@ -2,8 +2,6 @@
 
 # Functions to run podman containers
 
-CONTAINER_PREFIX=akihei
-
 keepassxc() {
 	NAME=keepassxc
 
@@ -18,5 +16,4 @@ keepassxc() {
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v /usr/share/X11/xkb/:/usr/share/X11/xkb/:ro \
 		localhost/keepassxc
-		#${CONTAINER_PREFIX}/keepassxc
 }
