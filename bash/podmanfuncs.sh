@@ -51,3 +51,11 @@ syncthing() {
 		--volume $DIR/:/var/syncthing/ \
 		syncthing/syncthing:latest
 }
+
+ubuntu() {
+	NAME=ubuntu
+
+	stopdel $NAME
+
+	podman run --rm -it --name $NAME $NAME:latest
+}
