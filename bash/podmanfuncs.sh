@@ -7,6 +7,14 @@ stopdel() {
 	podman rm -i $1
 }
 
+alpine() {
+	NAME=alpine
+
+	stopdel $NAME
+
+	podman run --rm -it --name $NAME $NAME:latest
+}
+
 keepassxc() {
 	NAME=keepassxc
 
