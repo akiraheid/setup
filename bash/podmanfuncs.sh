@@ -15,6 +15,15 @@ alpine() {
 	podman run --rm -it --name $NAME $NAME:latest
 }
 
+gimp() {
+	podman run -d --rm --name gimp \
+		-e DISPLAY=unix$DISPLAY \
+		-v $HOME/Pictures:/root/Pictures \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v /usr/share/fonts/:/usr/share/fonts:ro \
+		localhost/gimp
+}
+
 keepassxc() {
 	NAME=keepassxc
 
