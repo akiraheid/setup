@@ -9,6 +9,7 @@ alias lR='ls -RF'
 alias ls='ls -F'
 alias python='python3.8'
 alias pip='pip3'
+alias pvpn='protonvpn'
 alias sf='grep --line-number --recursive --directories=recurse'
 alias sff='grep --files-with-matches --recursive --directories=recurse'
 alias topme="top -u `whoami`"
