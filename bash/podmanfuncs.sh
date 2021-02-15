@@ -16,6 +16,7 @@ alpine() {
 }
 
 gimp() {
+	stopdel gimp
 	podman run -d --rm --name gimp \
 		-e DISPLAY=unix$DISPLAY \
 		-v $HOME/Pictures:/root/Pictures \
