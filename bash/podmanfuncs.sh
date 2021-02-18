@@ -43,8 +43,6 @@ keepassxc() {
 openoffice-calc() {
 	NAME=openoffice-calc
 
-	stopdel $NAME
-
 	if [ $# != 0 ]; then
 		VOL="-v $(readlink -f $1):/root/data/$(basename $1)"
 		ARG="/root/data/$1"
