@@ -22,16 +22,11 @@ gimp() {
 		-v $HOME/Pictures:/root/Pictures \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v /usr/share/fonts/:/usr/share/fonts:ro \
-		localhost/gimp
+		akiraheid/gimp
 }
 
 keepassxc() {
-	NAME=keepassxc
-
-	stopdel $NAME
-
 	podman run -d --rm \
-		--name $NAME \
 		-e DISPLAY=unix${DISPLAY} \
 		-v ${HOME}/syncthing/computers/keepassxc/:/root/.config/keepassxc/ \
 		-v /etc/machine-id:/etc/machine-id:ro \
@@ -56,7 +51,7 @@ openoffice-calc() {
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v /usr/share/X11/xkb/:/usr/share/X11/xkb/:ro \
 		$VOL \
-		localhost/openoffice-calc $ARG
+		akiraheid/openoffice-calc $ARG
 }
 oocalc() {
 	openoffice-calc $@
