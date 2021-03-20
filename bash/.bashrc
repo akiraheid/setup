@@ -1,6 +1,8 @@
 # This file should be left in the repository and a symlink with the name
 # ".bashrc" should be created in the user directory and point to this file.
 
+export PATH+=":${SETUP_DIR}/bin"
+
 # Remove duplicates
 TMP_PATH=$(echo "$PATH" | awk -v RS=":" -v ORS=":" '!a[$1]++{if (NR>1) printf ORS; printf $a[$1]}')
 
@@ -23,7 +25,7 @@ shopt -s checkwinsize
 # Default editor
 export EDITOR=vim
 
-if [ -z $TERM ]; then
+if [ -z "$TERM" ]; then
     TERM=xterm-256color
 fi
 
@@ -34,7 +36,6 @@ SETUP_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}) )
 . ${SETUP_DIR}/aliases
 . ${SETUP_DIR}/functions
 . ${SETUP_DIR}/podmanfuncs.sh
-export PATH+=":${SETUP_DIR}/bin/"
 
 
 # Terminal coloring (assuming 256 colors)

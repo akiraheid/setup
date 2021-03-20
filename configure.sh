@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Perform dev-system set up
+# Set for helperFuncs.sh
 DATE=`date +%Y%m%d-%H%M%S`
 
 REPO_DIR="${HOME}/repos"
