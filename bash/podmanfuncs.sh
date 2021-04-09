@@ -2,9 +2,13 @@
 
 # Functions to run podman containers
 
+# Force delete (if exists) the container with the specified name or ID
 stopdel() {
-	podman stop -i $1
-	podman rm -i $1
+	EXISTS=`podman ps -a --format '{{.Names}}' | grep "$1"`
+	if [ -n "$EXISTS" ]; then
+		echo "Found container $1. Deleting"
+		podman rm -f "$1"
+	fi
 }
 
 alpine() {
@@ -28,6 +32,11 @@ gimp() {
 # Start a KeepassXC container.
 # Optional file argument will open a specific file in a unnamed container.
 keepassxc() {
+	# Stop the existing container if a file is not specified
+	if [ $# == 0 ]; then
+		stopdel keepassxc
+	fi
+
 	ARG="/root/.config/keepassxc/keepassxc.kdbx"
 	NAME="--name keepassxc"
 	VOL=""
