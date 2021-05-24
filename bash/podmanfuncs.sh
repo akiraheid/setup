@@ -29,28 +29,6 @@ gimp() {
 		akiraheid/gimp
 }
 
-openoffice-calc() {
-	NAME=openoffice-calc
-
-	if [ $# != 0 ]; then
-		VOL="-v $(readlink -f $1):/root/data/$(basename $1)"
-		ARG="/root/data/$1"
-	else
-		ARG=""
-	fi
-	podman run -d --rm \
-		-e DISPLAY=unix${DISPLAY} \
-		--name ${NAME} \
-		-v ${HOME}/.config/openoffice:/root/.openoffice:rw \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v /usr/share/X11/xkb/:/usr/share/X11/xkb/:ro \
-		$VOL \
-		akiraheid/openoffice-calc $ARG
-}
-oocalc() {
-	openoffice-calc $@
-}
-
 syncthing() {
 	NAME=syncthing
 
