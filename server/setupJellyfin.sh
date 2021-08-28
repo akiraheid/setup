@@ -5,8 +5,10 @@ podman run \
 	--name jellyfin \
 	-p 8096:8096 \
 	--rm \
-	-v /raid/music/:/media/music/:ro \
+	-v /raid/books/:/media/books/:ro \
 	-v /raid/movies/:/media/movies/:ro \
+	-v /raid/music/:/media/music/:ro \
+	-v /raid/podcasts/:/media/podcasts/:ro \
 	-v jellyfin-cache:/cache \
 	-v jellyfin-config:/config \
 	jellyfin/jellyfin
