@@ -1,3 +1,4 @@
+#!/bin/bash
 # Update the system
 
 set -e
