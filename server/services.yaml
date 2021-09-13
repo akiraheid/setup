@@ -1,0 +1,98 @@
+# Services
+apiVersion: v1
+kind: Pod
+metadata:
+  name: services
+spec:
+  containers:
+    - name: jellyfin
+      image: docker.io/jellyfin/jellyfin:latest
+      volumeMounts:
+        - name: jellyfin-books
+          mountPath: /media/books
+          readOnly: true
+        - name: jellyfin-cache
+          mountPath: /cache
+        - name: jellyfin-config
+          mountPath: /config
+        - name: jellyfin-movies
+          mountPath: /media/movies
+          readOnly: true
+        - name: jellyfin-music
+          mountPath: /media/music
+          readOnly: true
+        - name: jellyfin-podcasts
+          mountPath: /media/podcasts
+          readOnly: true
+
+    - name: nginx
+      image: docker.io/nginx:stable-alpine
+      ports:
+        - containerPort: 80
+          hostPort: 8080
+      restartPolicy: onFailure
+      volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
+
+    - name: pihole
+      image: docker.io/pihole/pihole:latest
+      env:
+        - name: TZ
+          value: "America/New York"
+        - name: WEB_PORT
+          value: 3080
+      ports:
+        - containerPort: 53
+          hostPort: 3053
+          protocol: TCP
+        - containerPort: 53
+          hostPort: 3053
+          protocol: UDP
+        #- containerPort: 67
+        #  hostPort: 3067
+        - containerPort: 3080
+          hostPort: 3080
+      restartPolicy: onFailure
+      volumeMounts:
+        - name: pihole-dnsmasq
+          mountPath: /etc/dnsmasq.d
+        - name: pihole-etc
+          mountPath: /etc/pihole
+
+  volumes:
+    - name: jellyfin-books
+      hostPath:
+        path: /raid/books
+        type: Directory
+    - name: jellyfin-cache
+      persistentVolumeClaim:
+        claimName: jellyfin-cache
+    - name: jellyfin-config
+      persistentVolumeClaim:
+        claimName: jellyfin-config
+    - name: jellyfin-movies
+      hostPath:
+        path: /raid/movies
+        type: Directory
+    - name: jellyfin-music
+      hostPath:
+        path: /raid/music
+        type: Directory
+    - name: jellyfin-podcasts
+      hostPath:
+        path: /raid/podcasts
+        type: Directory
+
+    - name: nginx-conf
+      hostPath:
+        path: nginx
+        type: Directory
+
+    - name: pihole-dnsmasq
+      persistentVolumeClaim:
+        claimName: pihole-dnsmasq
+    - name: pihole-etc
+      persistentVolumeClaim:
+        claimName: pihole-etc
