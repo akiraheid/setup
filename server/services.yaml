@@ -8,6 +8,9 @@ spec:
     - name: jellyfin
       image: docker.io/jellyfin/jellyfin:latest
       volumeMounts:
+        - name: jellyfin-adventures
+          mountPath: /media/adventures
+          readOnly: true
         - name: jellyfin-books
           mountPath: /media/books
           readOnly: true
@@ -15,6 +18,9 @@ spec:
           mountPath: /cache
         - name: jellyfin-config
           mountPath: /config
+        - name: jellyfin-family-media
+          mountPath: /media/family-media
+          readOnly: true
         - name: jellyfin-movies
           mountPath: /media/movies
           readOnly: true
@@ -62,6 +68,10 @@ spec:
           mountPath: /etc/pihole
 
   volumes:
+    - name: jellyfin-adventures
+      hostPath:
+        path: /raid/adventures
+        type: Directory
     - name: jellyfin-books
       hostPath:
         path: /raid/books
@@ -72,6 +82,10 @@ spec:
     - name: jellyfin-config
       persistentVolumeClaim:
         claimName: jellyfin-config
+    - name: jellyfin-family-media
+      hostPath:
+        path: /raid/sync/family/family-photos
+        type: Directory
     - name: jellyfin-movies
       hostPath:
         path: /raid/movies
