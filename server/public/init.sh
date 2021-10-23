@@ -5,3 +5,6 @@ set -e
 pushd ../common
 bash setupAll.sh
 popd
+
+bash setupNginx.sh
+
