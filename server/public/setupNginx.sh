@@ -30,5 +30,5 @@ systemctl restart nginx
 
 snap install --classic certbot
 [ ! -f /usr/bin/certbot ] && ln -s /snap/bin/certbot /usr/bin/certbot
-certbot --nginx
+certbot --nginx -d heid.cc -d ddns.heid.cc
 certbot renew --dry-run
