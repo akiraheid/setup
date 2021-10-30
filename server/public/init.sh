@@ -7,4 +7,4 @@ bash setupAll.sh
 popd
 
 bash setupNginx.sh
-
+bash setupServices.sh

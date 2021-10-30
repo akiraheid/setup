@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: polo-deployment
+  labels:
+    app: polo
+spec:
+  replicas: 1
+  selectors:
+    matchLabels:
+      app: polo
+  template:
+    metadata:
+      labels:
+        app: polo
+    spec:
+      containers:
+        - name: polo
+          image: docker.io/akiraheid/polo:latest
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+          restartPolicy: onFailure
+          volumeMounts:
+            - name: polo-users
+              mountPath: /users.txt
+              readOnly: true
+            - name: polo-ips
+              mountPath: /ips/
+              readOnly: false
+
+      volumes:
+        - name: polo-users
+          hostPath:
+            path: /root/polo/users.txt
+            type: File
+        - name: polo-ips
+          hostPath:
+            path: /root/polo/ips/
+            type: Directory
