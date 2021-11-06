@@ -32,9 +32,9 @@ spec:
       volumes:
         - name: polo-users
           hostPath:
-            path: /root/polo/users.txt
+            path: /home/polo/polo/users.txt
             type: File
         - name: polo-ips
           hostPath:
-            path: /root/polo/ips/
+            path: /home/polo/polo/ips/
             type: Directory

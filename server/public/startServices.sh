@@ -5,4 +5,5 @@ set -e
 podman container prune -f
 podman image prune -f
 
-(cd /root/polo && ./deploy.sh)
+# Run as polo user
+(cd /home/polo/polo && runuser -u polo -g polo bash ./deploy.sh)
