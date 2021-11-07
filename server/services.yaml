@@ -41,6 +41,9 @@ spec:
         - name: nginx-conf
           mountPath: /etc/nginx/conf.d
           readOnly: true
+        - name: nginx-keys
+          mountPath: /etc/ssl/self_signed
+          readOnly: true
 
     - name: pihole
       image: docker.io/pihole/pihole:latest
@@ -102,6 +105,10 @@ spec:
     - name: nginx-conf
       hostPath:
         path: nginx
+        type: Directory
+    - name: nginx-keys
+      hostPath:
+        path: /etc/ssl/self_signed
         type: Directory
 
     - name: pihole-dnsmasq

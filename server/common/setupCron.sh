@@ -16,7 +16,7 @@ chmod 755 $rebootFile
 
 rootCronFile=/root/cron.txt
 echo "# m     h  dom  mon  dow  command
-* 3 * * 0 reboot now
+0 3 * * 0 reboot now
 @reboot bash $rebootFile" > $rootCronFile
 
 crontab $rootCronFile

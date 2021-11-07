@@ -12,5 +12,5 @@ fi
 
 cp -r polo /home/polo/
 chown -R polo:polo /home/polo/polo
-chmod 700 /home/polo/polo
+chmod 755 /home/polo/polo
 echo "Setup services - done"
