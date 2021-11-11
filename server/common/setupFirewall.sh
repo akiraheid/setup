@@ -16,7 +16,8 @@ fwredirect() {
 
 apt-get install -y ufw
 echo "y" | ufw enable
-ufw allow 22
+# 4269 is remapped SSH
+ufw allow 4269
 ufw allow 80
 ufw allow 443
 ufw allow out to any port 53
