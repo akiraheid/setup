@@ -7,6 +7,9 @@ spec:
   containers:
     - name: jellyfin
       image: docker.io/jellyfin/jellyfin:latest
+      ports:
+        - containerPort: 8096
+          hostPort: 8096
       volumeMounts:
         - name: jellyfin-adventures
           mountPath: /media/adventures
@@ -34,7 +37,9 @@ spec:
     - name: nginx
       image: docker.io/nginx:stable-alpine
       ports:
-        - containerPort: 80
+        # Use 80 when no TLS is set up
+        #- containerPort: 80
+        - containerPort: 443
           hostPort: 8080
       restartPolicy: onFailure
       volumeMounts:
@@ -45,30 +50,30 @@ spec:
           mountPath: /etc/ssl/self_signed
           readOnly: true
 
-    - name: pihole
-      image: docker.io/pihole/pihole:latest
-      env:
-        - name: TZ
-          value: "America/New York"
-        - name: WEB_PORT
-          value: 3080
-      ports:
-        - containerPort: 53
-          hostPort: 3053
-          protocol: TCP
-        - containerPort: 53
-          hostPort: 3053
-          protocol: UDP
-        #- containerPort: 67
-        #  hostPort: 3067
-        - containerPort: 3080
-          hostPort: 3080
-      restartPolicy: onFailure
-      volumeMounts:
-        - name: pihole-dnsmasq
-          mountPath: /etc/dnsmasq.d
-        - name: pihole-etc
-          mountPath: /etc/pihole
+            #- name: pihole
+            #  image: docker.io/pihole/pihole:latest
+            #  env:
+            #    - name: TZ
+            #      value: "America/New York"
+            #    - name: WEB_PORT
+            #      value: 3080
+            #  ports:
+            #    - containerPort: 53
+            #      hostPort: 3053
+            #      protocol: TCP
+            #    - containerPort: 53
+            #      hostPort: 3053
+            #      protocol: UDP
+            #    #- containerPort: 67
+            #    #  hostPort: 3067
+            #    - containerPort: 3080
+            #      hostPort: 3080
+            #  restartPolicy: onFailure
+            #  volumeMounts:
+            #    - name: pihole-dnsmasq
+            #      mountPath: /etc/dnsmasq.d
+            #    - name: pihole-etc
+            #      mountPath: /etc/pihole
 
   volumes:
     - name: jellyfin-adventures
@@ -111,9 +116,9 @@ spec:
         path: /etc/ssl/self_signed
         type: Directory
 
-    - name: pihole-dnsmasq
-      persistentVolumeClaim:
-        claimName: pihole-dnsmasq
-    - name: pihole-etc
-      persistentVolumeClaim:
-        claimName: pihole-etc
+          #- name: pihole-dnsmasq
+          #  persistentVolumeClaim:
+          #    claimName: pihole-dnsmasq
+          #- name: pihole-etc
+          #  persistentVolumeClaim:
+          #    claimName: pihole-etc
