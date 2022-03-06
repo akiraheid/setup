@@ -33,6 +33,9 @@ spec:
         - name: jellyfin-podcasts
           mountPath: /media/podcasts
           readOnly: true
+        - name: jellyfin-shows
+          mountPath: /media/shows
+          readOnly: true
 
     - name: nginx
       image: docker.io/nginx:stable-alpine
@@ -105,6 +108,10 @@ spec:
     - name: jellyfin-podcasts
       hostPath:
         path: /raid/podcasts
+        type: Directory
+    - name: jellyfin-shows
+      hostPath:
+        path: /raid/shows
         type: Directory
 
     - name: nginx-conf
