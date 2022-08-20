@@ -42,7 +42,7 @@ syncthing() {
 	podman run -d --rm \
 		-e PUID="`id -u`" \
 		-e PGID="`id -g`" \
-		-e STGUIADDRESS="" \
+		-e STGUIADDRESS="" \ # Delete this line to enable GUI
 		--name syncthing \
 		--network=host \
 		--userns=keep-id \
