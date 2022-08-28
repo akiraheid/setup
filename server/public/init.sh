@@ -6,5 +6,8 @@ pushd ../common
 bash setupAll.sh
 popd
 
-bash setupNginx.sh
-bash setupServices.sh
+bash nginx/setup.sh
+bash polo/setup.sh
+
+bash ../common/setupDummyUser.sh
+bash jellyfin/setup.sh

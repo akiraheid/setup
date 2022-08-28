@@ -2,13 +2,17 @@
 
 echo "Clear existing cron jobs"
 crontab -r
-echo "Clear existing cron jobs - Done"
+echo "Clear existing cron jobs - done"
 
 set -e
-echo "Install root cron jobs"
 
-cp updateSystem.sh /etc/cron.daily/updateSystem.sh
+echo "cron - Install daily update"
+updateFile=/etc/cron.daily/updateSystem
+cp updateSystem.sh $updateFile
+chmod 755 $updateFile
+echo "cron - Install daily update - done"
 
+echo "cron - Install reboot cron"
 mkdir -p /etc/cron.reboot
 rebootFile=/etc/runRebootCron.sh
 echo "find /etc/cron.reboot -type f -exec bash {} \;" > $rebootFile
@@ -21,4 +25,4 @@ echo "# m     h  dom  mon  dow  command
 
 crontab $rootCronFile
 rm $rootCronFile
-echo "Install root cron jobs - Done"
+echo "cron - Install reboot cron - done"

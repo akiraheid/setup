@@ -17,7 +17,7 @@ function updateFile() {
 }
 
 # Read IP for media.heid.cc from generated file
-ipFile=/home/polo/polo/ips/akira.txt
+ipFile=/home/polo/ips/akira.txt
 newIP=`cat $ipFile | cut -d: -f2`
 updateFile /etc/nginx/sites-enabled/media.heid.cc $newIP
 

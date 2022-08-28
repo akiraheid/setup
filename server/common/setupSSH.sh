@@ -28,7 +28,6 @@ LogLevel VERBOSE
 PasswordAuthentication no
 PermitEmptyPasswords no
 PermitRootLogin no
-Port 4269
 PrintMotd no
 Protocol 2
 PubKeyAuthentication yes

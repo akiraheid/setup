@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Setting up firewall"
+echo "Setting up default firewall"
 fwredirect() {
 	FROM=$1
 	TO=$2
@@ -16,8 +16,7 @@ fwredirect() {
 
 apt-get install -y ufw
 echo "y" | ufw enable
-# 4269 is remapped SSH
-ufw allow 4269
+ufw allow 22
 ufw allow 80
 ufw allow 443
 ufw allow out to any port 53
@@ -26,4 +25,4 @@ ufw allow out to any port 443
 ufw allow from 127.0.0.1 to 127.0.0.1
 ufw default deny outgoing
 ufw reload
-echo "Setting up firewall - Done"
+echo "Setting up default firewall - Done"
