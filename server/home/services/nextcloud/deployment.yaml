@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: nextcloud
+  labels:
+    app: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+    spec:
+      containers:
+        - name: nextcloud
+          image: docker.io/library/nextcloud:22
+          env:
+            - name: MYSQL_DATABASE
+              value: nextcloud
+            - name: MYSQL_HOST
+              value: 127.0.0.1
+            - name: MYSQL_PASSWORD
+              value: CHANGEME
+            - name: MYSQL_USER
+              value: nextcloud
+          ports:
+            - containerPort: 80
+              hostPort: 8081
+          restartPolicy: onFailure
+          volumeMounts:
+            - name: nextcloud-config
+              mountPath: /var/www/html/config
+              readOnly: false
+            - name: nextcloud-custom_apps
+              mountPath: /var/www/html/custom_apps
+              readOnly: false
+            - name: nextcloud-storage
+              mountPath: /var/www/html/data
+              readOnly: false
+
+        - name: mariadb
+          image: docker.io/library/mariadb:10
+          env:
+            - name: MYSQL_DATABASE
+              value: nextcloud
+            - name: MYSQL_PASSWORD
+              value: CHANGEME
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_CHANGEME
+            - name: MYSQL_USER
+              value: nextcloud
+          restartPolicy: onFailure
+          volumeMounts:
+            - name: nextcloud-db
+              mountPath: /var/lib/mysql
+              readOnly: false
+
+      volumes:
+        - name: nextcloud-config
+          persistentVolumeClaim:
+            name: nextcloud-config
+        - name: nextcloud-custom_apps
+          persistentVolumeClaim:
+            name: nextcloud-custom_apps
+        - name: nextcloud-db
+          persistentVolumeClaim:
+            name: nextcloud-db
+        - name: nextcloud-storage
+          hostPath:
+            path: /raid/nextcloud/storage
+            type: Directory
