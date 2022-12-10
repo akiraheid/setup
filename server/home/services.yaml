@@ -38,7 +38,7 @@ spec:
           readOnly: true
 
     - name: nginx
-      image: docker.io/nginx:stable-alpine
+      image: docker.io/nginx:1-alpine
       ports:
         # Use 80 when no TLS is set up
         #- containerPort: 80
