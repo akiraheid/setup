@@ -1,4 +1,0 @@
-# m      h  dom  mon  dow  command
-  0      *  *    *    *    /root/updateIP.sh
-  0      0  *    *    1    /root/updateSystem.sh
-@reboot                    runuser -u jd /root/startServices.sh
