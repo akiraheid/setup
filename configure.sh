@@ -75,3 +75,6 @@ for choice in $choices; do
 			;;
 	esac
 done
+
+# Install make
+_install build-essential
