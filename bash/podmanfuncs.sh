@@ -19,16 +19,6 @@ alpine() {
 	podman run --rm -it --name $NAME $NAME:latest
 }
 
-gimp() {
-	stopdel gimp
-	podman run -d --rm --name gimp \
-		-e DISPLAY=unix$DISPLAY \
-		-v $HOME/Pictures:/root/Pictures \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v /usr/share/fonts/:/usr/share/fonts:ro \
-		akiraheid/gimp
-}
-
 syncthing() {
 	NAME=syncthing
 
@@ -43,7 +33,6 @@ syncthing() {
 	podman run -d --rm \
 		-e PUID="`id -u`" \
 		-e PGID="`id -g`" \
-		-e STGUIADDRESS="" \
 		--name syncthing \
 		--network=host \
 		--userns=keep-id \
