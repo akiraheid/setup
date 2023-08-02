@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jellyfin-pod
+spec:
+  containers:
+    - name: jellyfin-jellyfin
+      image: docker.io/jellyfin/jellyfin:10.8.8
+      ports:
+        - containerPort: 8096
+          hostPort: 8096
+      volumeMounts:
+        - name: jellyfin-adventures
+          mountPath: /media/adventures
+          readOnly: true
+        - name: jellyfin-books
+          mountPath: /media/books
+          readOnly: true
+        - name: jellyfin-cache
+          mountPath: /cache
+        - name: jellyfin-config
+          mountPath: /config
+        - name: jellyfin-family-media
+          mountPath: /media/family-media
+          readOnly: true
+        - name: jellyfin-movies
+          mountPath: /media/movies
+          readOnly: true
+        - name: jellyfin-music
+          mountPath: /media/music
+          readOnly: true
+        - name: jellyfin-podcasts
+          mountPath: /media/podcasts
+          readOnly: true
+        - name: jellyfin-shows
+          mountPath: /media/shows
+          readOnly: true
+
+    - name: jellyfin-nginx
+      image: docker.io/nginx:1-alpine
+      ports:
+        # Use 80 when no TLS is set up
+        #- containerPort: 80
+        - containerPort: 443
+          hostPort: 8080
+      restartPolicy: onFailure
+      volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
+        - name: nginx-keys
+          mountPath: /etc/ssl/self_signed
+          readOnly: true
+
+  volumes:
+    - name: jellyfin-adventures
+      hostPath:
+        path: /raid/adventures
+        type: Directory
+    - name: jellyfin-books
+      hostPath:
+        path: /raid/books
+        type: Directory
+    - name: jellyfin-cache
+      persistentVolumeClaim:
+        claimName: jellyfin-cache
+    - name: jellyfin-config
+      persistentVolumeClaim:
+        claimName: jellyfin-config
+    - name: jellyfin-family-media
+      hostPath:
+        path: /raid/sync/family/family-photos
+        type: Directory
+    - name: jellyfin-movies
+      hostPath:
+        path: /raid/movies
+        type: Directory
+    - name: jellyfin-music
+      hostPath:
+        path: /raid/music
+        type: Directory
+    - name: jellyfin-podcasts
+      hostPath:
+        path: /raid/podcasts
+        type: Directory
+    - name: jellyfin-shows
+      hostPath:
+        path: /raid/shows
+        type: Directory
+
+    - name: nginx-conf
+      hostPath:
+        path: nginx
+        type: Directory
+    - name: nginx-keys
+      hostPath:
+        path: /etc/ssl/self_signed
+        type: Directory
