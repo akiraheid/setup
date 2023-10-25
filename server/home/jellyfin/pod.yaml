@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: jellyfin-pod
+  name: jellyfin
 spec:
   containers:
     - name: jellyfin-jellyfin
