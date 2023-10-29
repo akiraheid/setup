@@ -24,5 +24,5 @@ fi
 
 echo "Start pod..."
 cd $DIR
-podman play kube jellyfin-pod.yaml
+podman play kube pod.yaml
 echo "Start pod... done"
