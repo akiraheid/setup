@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: podgrab-pod
+spec:
+  containers:
+    - name: podgrab
+      image: docker.io/akhilrex/podgrab:1.0.0
+      restartPolicy: OnFailure
+      env:
+        - name: CHECK_FREQUENCY
+          value: 1440
+        - name: PASSWORD
+          value: PASSWORD_CHANGEME
+      ports:
+        - containerPort: 8080
+          hostPort: 8083
+      volumeMounts:
+        - name: podcasts
+          mountPath: /assets
+          readOnly: false
+        - name: config
+          mountPath: /config
+          readOnly: false
+
+  volumes:
+    - name: podcasts
+      hostPath:
+        path: /raid/apps/podgrab
+        type: Directory
+    - name: config
+      persistentVolumeClaim:
+        claimName: podgrab-config
