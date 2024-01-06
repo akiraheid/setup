@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: grocy
+spec:
+  containers:
+    - name: frontend
+      image: docker.io/grocy/frontend:v4.0.3
+      imagePullPolicy: IfNotPresent
+      restartPolicy: onFailure
+      volumeMounts:
+        - name: grocy-nginx
+          mountPath: /etc/nginx/common.conf
+          readOnly: true
+
+    - name: backend
+      image: docker.io/grocy/backend:v4.0.3
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8080
+          hostPort: 8082
+      restartPolicy: onFailure
+      volumeMounts:
+        - name: grocy-config
+          mountPath: /var/www/data/config.php
+          readOnly: false
+        - name: grocy-db
+          mountPath: /var/www/data/grocy.db
+          readOnly: false
+
+  volumes:
+    - name: grocy-config
+      hostPath:
+        path: /raid/apps/grocy/config.php
+        type: File
+    - name: grocy-db
+      hostPath:
+        path: /raid/apps/grocy/grocy.db
+        type: File
+    - name: grocy-nginx
+      hostPath:
+        path: /raid/apps/grocy/nginx/common.conf
+        type: File
+    # Currently unused
+    # grocy-backed comes with a DemoBarcodeLookupPlugin.php by default
+    #- name: grocy-plugins
+    #  hostPath:
+    #    path: /raid/apps/grocy/plugins
+    #    type: Directory

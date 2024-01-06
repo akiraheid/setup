@@ -48,6 +48,7 @@ priv=${domain}.key
 if [ ! -f $selfSignedDir/$priv ]; then
 	openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out $pub -keyout $priv
 	cp $pub $priv $selfSignedDir/
+	# TODO make the certificate readable by jellyfin group
 fi
 echo "Transfer $pub to public servers!"
 echo "Create self-signed SSL cert... done"
