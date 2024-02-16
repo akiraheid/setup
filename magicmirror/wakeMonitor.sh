@@ -1,6 +1,10 @@
+#!/bin/bash
+
+PATH=/usr/bin:/bin
 export DISPLAY=:0
 
 xset dpms force on
+echo "`date \"+%F %T\"` Monitor on"
 
 X_SEC=10
 

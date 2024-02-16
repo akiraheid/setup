@@ -1,3 +1,4 @@
-set -e
-cd repos/MagicMirror
-(git pull origin master; nodemon -x npm start)
+#!/bin/bash
+set -x
+cd ~/repos/MagicMirror
+npm start
