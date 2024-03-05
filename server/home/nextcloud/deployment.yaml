@@ -37,7 +37,7 @@ spec:
             - name: nextcloud-custom_apps
               mountPath: /var/www/html/custom_apps
               readOnly: false
-            - name: nextcloud-storage
+            - name: nextcloud-data
               mountPath: /var/www/html/data
               readOnly: false
 
@@ -60,15 +60,18 @@ spec:
 
       volumes:
         - name: nextcloud-config
-          persistentVolumeClaim:
-            name: nextcloud-config
-        - name: nextcloud-custom_apps
-          persistentVolumeClaim:
-            name: nextcloud-custom_apps
-        - name: nextcloud-db
-          persistentVolumeClaim:
-            name: nextcloud-db
-        - name: nextcloud-storage
           hostPath:
-            path: /raid/nextcloud/storage
+            path: /raid/apps/nextcloud/config
+            type: Directory
+        - name: nextcloud-custom_apps
+          hostPath:
+            path: /raid/apps/nextcloud/custom_apps
+            type: Directory
+        - name: nextcloud-db
+          hostPath:
+            path: /raid/apps/nextcloud/sqldb
+            type: Directory
+        - name: nextcloud-data
+          hostPath:
+            path: /raid/apps/nextcloud/data
             type: Directory

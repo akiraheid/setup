@@ -9,6 +9,6 @@ LOGNAME=$USER
 # job-id must be unique
 #
 # period  delay  job-id        command
-1         5      cron.daily    run-parts --report $HOME/cron/daily
-7         10     cron.weekly   run-parts --report $HOME/cron/weekly
-@monthly  15     cron.monthly  run-parts --report $HOME/cron/monthly
+1         5      cron.daily    run-parts --report $HOME/anacron/daily
+7         10     cron.weekly   run-parts --report $HOME/anacron/weekly
+@monthly  15     cron.monthly  run-parts --report $HOME/anacron/monthly
