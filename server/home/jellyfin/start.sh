@@ -11,7 +11,9 @@ echo "Check for existing pod..."
 set +e
 if podman pod exists $podname ; then
 	set -e
-	podstatus=`podman pod ps | grep $podname | sed 's/\s\+/ /g' | cut -d ' ' -f 3`
+	# Use spaces around the pod name to ensure no substrings are matched
+	podstatus=`podman pod ps | grep " $podname " | sed 's/\s\+/ /g' | cut -d ' ' -f 3`
+
 	if [ "$podstatus" == "Running" ]; then
 		echo "Pod already running. Exiting"
 		exit 0
