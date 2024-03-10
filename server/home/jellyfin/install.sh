@@ -9,14 +9,17 @@ name=jellyfin
 
 echo "Create app dirs..."
 appdir="/raid/apps/$name"
-sudo mkdir -p "$appdir"
+sudo mkdir -pv "$appdir"
+
+echo "Change $appdir permissions to allow log writing"
+sudo chown -v $USER:$USER "$appdir"
 
 selfSignedDir=/etc/ssl/self_signed
 sudo mkdir -pv /raid
 pushd /raid
 sudo mkdir -pv adventures books movies music podcasts shows \
 	sync/family/family-photos \
-	$selfSignedDir
+	"$selfSignedDir"
 popd
 echo "Create app dirs... done"
 
@@ -25,8 +28,8 @@ pushd "$DIR"
 startScript="start.sh"
 cronscript="cron.sh"
 yaml="pod.yaml"
-chmod 755 $startScript $cronscript
-sudo cp -v $startScript $yaml "${appdir}/"
+chmod -v 755 $startScript $cronscript
+cp -rv $startScript $yaml nginx "${appdir}/"
 
 anacrondir=~/anacron/hourly
 if [ ! -d "$anacrondir" ]; then

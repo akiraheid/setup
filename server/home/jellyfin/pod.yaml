@@ -90,7 +90,7 @@ spec:
 
     - name: nginx-conf
       hostPath:
-        path: nginx
+        path: /raid/apps/jellyfin/nginx
         type: Directory
     - name: nginx-keys
       hostPath:
