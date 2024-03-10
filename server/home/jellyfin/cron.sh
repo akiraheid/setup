@@ -1,4 +1,5 @@
 #!/bin/sh
 set -e
-cd /home/jellyfin
-runuser jellyfin ./start.sh >> log.txt 2>&1
+
+cd /raid/apps/jellyfin
+./start.sh | tee ./log.txt

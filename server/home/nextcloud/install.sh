@@ -24,6 +24,7 @@ cp -v deployment.yaml start.sh "$appdir/"
 anacrondir=~/anacron/hourly
 if [ ! -d "$anacrondir" ]; then
 	echo "ERROR: Install anacron first"
+	exit 1
 fi
 
 cp -v anacron.sh "$anacrondir/startNextcloud"

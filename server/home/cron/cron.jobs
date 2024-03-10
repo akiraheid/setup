@@ -12,5 +12,5 @@ SHELL=/bin/sh
 # |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
 # |  |  |  |  |
 # *  *  *  *  *  command to be executed
-0    *  *  *  *  /usr/sbin/anacron -s -t $HOME/.anacron/etc/anacrontab -S $HOME/.anacron/etc/spool
+0    *  *  *  *  /usr/sbin/anacron -s -t $HOME/.anacron/etc/anacrontab -S $HOME/.anacron/spool
 0    *  *  *  *  run-parts --report -- $HOME/anacron/hourly
