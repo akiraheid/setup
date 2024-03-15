@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-date -u
+date --iso-8601
 
 DIR=$(dirname `readlink -f $0`)
 
