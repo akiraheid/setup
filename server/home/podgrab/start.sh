@@ -1,24 +1,23 @@
 #!/bin/bash
 set -e
 
-date -u
+date --iso-8601
 
 DIR=$(dirname `readlink -f $0`)
 
-if grep CHANGEME $DIR/pod.yaml ; then
-	echo "Must change default password"
-	exit 1
-fi
+# _pod is appended by podman
+name=podgrab_pod
+echo "Check for existing pod..."
 
-# Use "podgrab_pod" because podman will rename the pod if a container in the pod
-# has the same name
-podname=podgrab-pod
-if podman pod exists $podname ; then
+if podman pod exists $name ; then
 	echo "Pod exists"
 	echo "Check if running"
-	podstatus=`podman pod ps | grep $podname | sed 's/\s\+/ /g' | cut -d ' ' -f 3`
+	podstatus=`podman pod ps | grep $name | sed 's/\s\+/ /g' | cut -d ' ' -f 3`
 	if [ "$podstatus" != "Running" ]; then
-		podman pod rm -f $podname
+		podman pod rm -f $name
+	else
+		echo "Pod is already running. Exiting"
+		exit 0
 	fi
 else
 	echo "Pod doesn't exist"

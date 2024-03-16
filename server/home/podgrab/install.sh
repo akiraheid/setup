@@ -1,23 +1,44 @@
 #!/bin/bash
 set -e
 
-DIR=$(dirname `readlink -f $0`)
+anacrondir=~/anacron/hourly
+if [ ! -d "$anacrondir" ]; then
+	echo "ERROR: Install anacron for $USER first"
+	exit 1
+fi
 
-echo "Install Podgrab..."
+DIR=$(dirname `readlink -f $0`)
+cd "$DIR"
 
 name=podgrab
 
-echo "Create data dirs..."
-dataDir=/raid/apps/podgrab
-sudo mkdir -pv $dataDir
-sudo chown $USER:$USER $dataDir
-echo "Create data dirs... done"
+echo "Install $name..."
 
-echo "Install cron job..."
-bash $DIR/../installUserCron.sh
-toPath=$HOME/cron/daily/podgrab-link.sh
-ln -v "$DIR/cron.sh" $toPath
-chmod 700 $toPath
-echo "Install cron job... done"
+echo "Create app dirs..."
+appDir=/raid/apps/$name
+configDir=${appDir}/config
+podcastDir=${appDir}/podcasts
+sudo mkdir -pv "$appDir"
+sudo chown $USER:$USER "$appDir"
+mkdir -pv "$configDir" "$podcastDir"
+echo "Create app dirs... done"
 
-echo "Install Podgrab... done"
+echo "Install start script..."
+startScript="start.sh"
+cronscript="cron.sh"
+chmod -v 755 "$startScript" "$cronscript"
+cp -v "$startScript" "${appDir}/"
+cp -v "$cronscript" "${anacrondir}/startPodgrab"
+echo "Install start script... done"
+
+yaml="pod.yaml"
+appyaml=${appDir}/${yaml}
+if [ -f "$appyaml" ]; then
+	echo "$appyaml already exists. Leaving existing file alone."
+	# Make sure existing file is protected because it has a pasword
+	chmod -v 700 "$appyaml"
+else
+	cp -v "$yaml" "$appyaml"
+fi
+
+echo "Install $name... done"

@@ -3,7 +3,7 @@ set -e
 
 dataDir=/raid/apps/podgrab
 storageDir=/raid/podcasts
-echo "Making hardlinks for $dataDir"
+echo "Making hardlinks for $dataDir..."
 cd $dataDir
 for dir in */; do
 	dir=${dir%*/} # Remove trailing '/'
@@ -14,3 +14,6 @@ for dir in */; do
 	find -type f -links 1 -exec ln -v {} "$storageDir/$dir/{}" \;
 	popd
 done
+echo "Making hardlinks for $dataDir... done"
+
+./start.sh | tee -a ./log.txt

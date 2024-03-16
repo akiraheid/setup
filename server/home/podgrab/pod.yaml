@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: podgrab-pod
+  name: podgrab
 spec:
   containers:
     - name: podgrab
@@ -26,8 +26,11 @@ spec:
   volumes:
     - name: podcasts
       hostPath:
-        path: /raid/apps/podgrab
+        path: /raid/apps/podgrab/podcasts
         type: Directory
     - name: config
-      persistentVolumeClaim:
-        claimName: podgrab-config
+      hostPath:
+        path: /raid/apps/podgrab/config
+        type: Directory
+      #persistentVolumeClaim:
+      #  claimName: podgrab-config
