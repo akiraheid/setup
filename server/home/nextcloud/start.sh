@@ -1,22 +1,31 @@
 #!/bin/bash
 set -e
 
-function dt() {
-	date +%FT%T
-}
+date --iso-8601
 
-scriptdir=`dirname $(readlink -f $0)`
-podname=nextcloud
+DIR=$(dirname `readlink -f $0`)
 
-if podman pod exists $podname ; then
-	state=`podman pod ps -a | grep $podname | sed 's/\s\+/ /g' | cut -d ' ' -f 3`
+name=nextcloud
+echo "Check for existing pod ${name}..."
 
-	if [ "$state" != "Running" ]; then
-		podman pod rm -f $podname
+if podman pod exists $name ; then
+	echo "Pod ${name} exists"
+	echo "Check if running"
+	podstatus=`podman pod ps | grep $name | sed 's/\s\+/ /g' | cut -d ' ' -f 3`
+	if [ "$podstatus" != "Running" ]; then
+		podman pod rm -f $name
+	else
+		echo "Pod ${name} is already running. Exiting"
+		exit 0
 	fi
+else
+	echo "Pod ${name} doesn't exist"
 fi
 
-podman play kube $scriptdir/deployment.yaml
+echo "Start deployment ${name}..."
+cd $DIR
+podman play kube deployment.yaml
+echo "Start deployment ${name}... done"
 
 #echo "Cleaning up pod..."
 #POD=nextcloud

@@ -3,6 +3,7 @@
 set -e
 
 scriptdir=`dirname $(readlink -f $0)`
+cd "${scriptdir}"
 
 appdir=/raid/apps/nextcloud
 configdir=$appdir/config
@@ -10,7 +11,6 @@ customappdir=$appdir/custom_apps
 datadir=$appdir/data
 sqldbdir=$appdir/sqldb
 
-echo "scriptdir   =$scriptdir"
 echo "appdir      =$appdir"
 echo "configdir   =$configdir"
 echo "customappdir=$customappdir"
@@ -19,7 +19,17 @@ echo "sqldbdir    =$sqldbdir"
 
 mkdir -pv "$configdir" "$customappdir" "$datadir" "$sqldbdir"
 
-cp -v deployment.yaml start.sh "$appdir/"
+yaml=deployment.yaml
+appyaml=${appdir}/${yaml}
+if [ -f "${appyaml}" ]; then
+	echo "ERROR: ${appyaml} already exists. Manually update ${appyaml}"
+	echo "       Be sure to keep the password values!"
+else
+	cp -v "${yaml}" "${appyaml}"
+fi
+
+chmod -v 755 start.sh anacron.sh
+cp -v start.sh "${appdir}/"
 
 anacrondir=~/anacron/hourly
 if [ ! -d "$anacrondir" ]; then
@@ -27,6 +37,6 @@ if [ ! -d "$anacrondir" ]; then
 	exit 1
 fi
 
-cp -v anacron.sh "$anacrondir/startNextcloud"
+cp -v anacron.sh "${anacrondir}/startNextcloud"
 
 echo "Installed nextcloud"
