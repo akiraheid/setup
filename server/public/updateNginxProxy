@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+from argparse import ArgumentParser
+from datetime import datetime
+from re import fullmatch, search
+
+def log(msg):
+    print(f'[{datetime.now()}] {msg}')
+
+def readIp(filename):
+    log(f'Reading {filename}')
+    data = None
+    with open(filename, 'r', encoding='utf-8') as fp:
+        # IP should be first 11 characters
+        data = fp.read(11)
+
+    return data if data and fullmatch('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', data) else None
+
+def updateProxy(filename, ip):
+    log(f'Updating {filename} with {ip}')
+    data = None
+    with open(filename, 'r', encoding='utf-8') as fp:
+        data = fp.read()
+
+        ret = []
+        for line in data:
+            comment = '# Managed by NGINX proxy updater'
+            # Expect server 127.0.0.1:8090; # Managed by NGINX proxy updater
+            match = search(
+                    'server [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:(?P<port>[0-9]{4,5}; {comment}')
+
+            if match:
+                ret.append(f'server {ip}:{match.group("port")}; {comment}}')
+
+            else
+                ret.append(line)
+
+        fp.seek(0)
+        fp.write('\n'.join(lines))
+
+
+if __name__ == '__main__':
+    parser = ArgumentParser('Take the IP address from file and update the NGINX proxy.')
+    parser.add_argument('file', type=str, help='The file with the IP address')
+    args = parser.parse_args()
+
+    ip = readIp(args.file)
+
+    if not ip:
+        log(f'Could not read IP from {args.file}')
+
+    updateProxy(ip)
