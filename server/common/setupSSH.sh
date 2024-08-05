@@ -20,7 +20,6 @@ echo "Generating sshd_config"
 echo "AllowAgentForwarding no
 AllowTcpForwarding no
 ChallengeResponseAuthentication no
-HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 HostKey /etc/ssh/ssh_host_rsa_key
 LoginGraceTime 5
@@ -31,8 +30,6 @@ PermitRootLogin no
 PrintMotd no
 Protocol 2
 PubKeyAuthentication yes
-RSAAuthentication yes
-ServerKeyBits 4096
 UseDNS no
 UsePAM yes
 X11Forwarding no" > /etc/ssh/sshd_config
