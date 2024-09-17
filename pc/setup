@@ -1,12 +1,47 @@
 #!/usr/bin/env python3
+'''Set up the PC with personal configuration.'''
 
-from argparse import ArgumentParser
+import datetime
+import logging
+from os.path import dirname, expanduser, isfile, realpath
+from pathlib import Path
 from subprocess import run
+from sys import exit as _exit
 
-def aptInstall(name):
-    run(['apt', 'install', '-y', name])
+def setup_logger(log_filename='setup.log'):
+    '''Set up logger.'''
 
-def setupFirewall():
+    # Configure the logger
+    _logger = logging.getLogger(__name__)
+    _logger.setLevel(logging.DEBUG)
+
+    # Create a file handler
+    file_handler = logging.FileHandler(log_filename)
+    file_handler.setLevel(logging.DEBUG)
+
+    # Create a console handler
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.WARNING)
+
+    # Create a formatter and set it for both handlers
+    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+
+    # Add the handlers to the logger
+    _logger.addHandler(file_handler)
+    _logger.addHandler(console_handler)
+
+    return _logger
+
+def mkdir(dirpath):
+    Path(dirpath).mkdir(parents=True, exist_ok=True)
+
+def apt_install(name):
+    '''Install a package name with apt.'''
+    run(['apt', 'install', '-y', name], check=True)
+
+def setup_firewall():
     # Regardless of how dynamic your network environment may be, it is still
     # useful to be familiar with the general idea behind each of the predefined
     # zones for firewalld. In order from least trusted to most trusted, the
@@ -39,16 +74,62 @@ def setupFirewall():
     # trusted: All network connections are accepted.
     # https://firewalld.org/documentation/zone/predefined-zones.html
 
-    aptInstall('firewalld')
+    apt_install('firewalld')
 
-    def firewallCmd(args):
-        run(['firewall-cmd', '--permanent'] + args)
+    def firewallcmd(args):
+        run(['firewall-cmd', '--permanent'] + args, check=True)
 
     # By default, firewalld uses the public zone and has dhcpv6-client and ssh
     # services running. Disable these because we don't host these services on
     # PCs.
-    firewallCmd(['--remove-service', 'dhcpv6-client'])
-    firewallCmd(['--remove-service', 'ssh'])
+    firewallcmd(['--remove-service', 'dhcpv6-client'])
+    firewallcmd(['--remove-service', 'ssh'])
+
+def safecp(source, dest):
+    '''Copy the source to dest. Makes a backup, if dest already exists.'''
+    logger.debug(f'source = {source}')
+    logger.debug(f'dest = {dest}')
+
+    if not isfile(source):
+        logging.critical(f'Cannot copy "{source}". Does not exist!')
+        _exit(1)
+
+    if isfile(dest):
+        current_time = datetime.datetime.now()
+        timestamp = current_time.strftime("%Y%m%d_%H%M%S")
+        bakname = f'{dest}-{timestamp}.bak'
+        logger.debug(f'bakname = {bakname}')
+
+        logger.info(f'"{dest}" already exists. Backing up as "{bakname}"')
+        run(['mv', dest, bakname], check=True)
+        print(f'Backed up existing "{dest}" as "{bakname}"')
+
+    # Copy instead of hardlink to avoid breaking things when testing
+    run(['cp', source, dest], check=True)
+
+def setup_bash():
+    '''Install bash configuration files.'''
+    thisfile = realpath(__file__)
+    thisdir = dirname(thisfile)
+
+    homedir = expanduser(f'~')
+
+    # Move shell/bash files
+    safecp(f'{thisdir}/bash/.bashrc', f'{homedir}/.bashrc')
+    safecp(f'{thisdir}/bash/.bash_aliases', f'{homedir}/.bash_aliases')
+    safecp(f'{thisdir}/bash/.bash_functions', f'{homedir}/.bash_functions')
+    safecp(f'{thisdir}/bash/.bash_profile', f'{homedir}/.bash_profile')
+    safecp(f'{thisdir}/bash/.profile', f'{homedir}/.profile')
+
+    # Move executables
+    mkdir('~/.local/bin')
+    safecp(f'{thisdir}/bin/oil', f'{homedir}/.local/bin/oil')
+    safecp(f'{thisdir}/bin/syncthing', f'{homedir}/.local/bin/syncthing')
+
+logger = setup_logger()
 
 if __name__ == '__main__':
-    setupFirewall()
+    print('Setting up PC')
+    setup_firewall()
+    setup_bash()
+    print('Done!')

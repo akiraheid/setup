@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Start the VPN and update the system
 set -e
 
 echo "Now we're cookin'!"

@@ -1,7 +1,0 @@
-#!/bin/bash
-
-podman run --rm \
-	--entrypoint npm \
-	-v ${PWD}/:/data/:ro \
-	-w /data \
-	node:current-alpine $@

@@ -19,27 +19,6 @@ alpine() {
 	podman run --rm -it --name $NAME $NAME:latest
 }
 
-syncthing() {
-	NAME=syncthing
-
-	stopdel $NAME
-
-	DIR=~/syncthing
-	mkdir -p $DIR
-
-	# Delete -e STGUIADDRESS="" line to enable GUI
-	# normally runs with port mappings -p 8384:8384 -p 22000:22000 but using
-	# --network=host eliminates the need to specify the mappings
-	podman run -d --rm \
-		-e PUID="`id -u`" \
-		-e PGID="`id -g`" \
-		--name syncthing \
-		--network=host \
-		--userns=keep-id \
-		--volume $DIR/:/var/syncthing/ \
-		syncthing/syncthing:latest
-}
-
 ubuntu() {
 	NAME=ubuntu
 

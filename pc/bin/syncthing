@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+NAME=syncthing
+
+podman container exists "$NAME" && podman rm -f "$NAME"
+
+DIR=~/syncthing
+mkdir -p "$DIR"
+
+image=docker.io/syncthing/syncthing:latest
+
+# Delete -e STGUIADDRESS="" line to enable GUI
+# normally runs with port mappings -p 8384:8384 -p 22000:22000 but using
+# --network=host eliminates the need to specify the mappings
+podman run -d --rm \
+	-e PUID="$(id -u)" \
+	-e PGID="$(id -g)" \
+	--name "$NAME" \
+	--network=host \
+	--userns=keep-id \
+	--volume "${DIR}/:/var/syncthing/" \
+	"${image}"
+
+podman pull "${image}"
