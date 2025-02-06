@@ -30,9 +30,9 @@ alias sf='grep --line-number --recursive --directories=recurse'
 alias sff='grep --files-with-matches --recursive --directories=recurse'
 
 # protonvpn aliases
-alias vpn='protonvpn-cli c -r'
 alias vpnd='protonvpn-cli d'
 alias vpnf='protonvpn-cli c -f'
+alias vpnr='protonvpn-cli c -r'
 
 # other aliases
 alias cp='cp -p'
