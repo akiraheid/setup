@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
+podman container exists ollama || ollama-server
+
+podman exec ollama ollama "${@}"
