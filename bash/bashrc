@@ -1,0 +1,124 @@
+# bash run commands
+
+# bash settings for shells spawned after computer startup (interactive shells),
+# such as alias and function definitions, shell options, and prompt settings.
+# You could also put key bindings here, but for bash they normally go into
+# ~/.inputrc.
+# https://superuser.com/a/183980
+
+# executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+	*i*) ;;
+	*) return;;
+esac
+
+# Don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# Append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# Check the window size after each command and, if necessary,
+# Update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+if [ -f "$HOME/.bash_aliases" ]; then
+   . "$HOME/.bash_aliases"
+fi
+
+if [ -f "$HOME/.bash_functions" ]; then
+   . "$HOME/.bash_functions"
+fi
+
+# enable programmable completion features (you don't need to enable this, if
+# it's already enabled in /etc/bash.bashrc and /etc/profile sources
+# /etc/bash.bashrc).
+if ! shopt -oq posix; then
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+	fi
+fi
+
+# Default editor
+export EDITOR=vim
+
+function updatePS1 {
+	local branch
+	branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+	local color_prompt
+
+	# determine if terminal color is available
+	case "$TERM" in
+		xterm-color|*-256color) color_prompt=yes;;
+	esac
+
+	# set prompt before user input (PS1)
+	if [ "$color_prompt" = yes ]; then
+		local norm blue brown green orange red white
+		norm=$(tput sgr 0)
+		blue=$(tput setaf 62)
+		brown=$(tput setaf 130)
+		green=$(tput setaf 83)
+		orange=$(tput setaf 166)
+		red=$(tput setaf 196)
+		white=$(tput setaf 253)
+
+		local username_color at_color host_color cur_dir_color branch_color
+		username_color=${green}
+		at_color=${red}
+		host_color=${blue}
+		cur_dir_color=${red}
+		branch_color=${red}
+
+		if [[ `date +%m` == 07 ]]; then # Fourth of July
+			username_color=${red}
+			at_color=${white}
+			host_color=${blue}
+			cur_dir_color=${blue}
+			branch_color=${red}
+		elif [[ `date +%m` == 10 ]]; then # Halloween
+			username_color=${orange}
+			at_color=${brown}
+			host_color=${orange}
+			cur_dir_color=${orange}
+			branch_color=${brown}
+		elif [[ `date +%m` == 12 ]]; then # Christmas
+			username_color=${green}
+			at_color=${white}
+			host_color=${red}
+			cur_dir_color=${green}
+			branch_color=${red}
+		fi
+
+		export PS1="\[${username_color}\]\u\[${at_color}\]@\[${host_color}\]\h \[${white}\][\[${cur_dir_color}\]\w\[${white}\]] \[${branch_color}\]${branch}\[${white}\]\n\[${norm}\]> "
+	else
+		export PS1="\u@\h [\w] ${branch}\n> "
+	fi
+}
+
+PROMPT_COMMAND=updatePS1
+
+# Set PS1
+updatePS1

@@ -1,15 +1,16 @@
 #!/bin/bash
 set -e
 
-dirs=(books comics movies music podcasts shows sync/family/family-photos)
+dirs=(adventures books comics movies music podcasts shows sync)
 raidDir=/raid
 backupDir="/media/$USER/cold storage/backup"
-cd "$backupDir"
+mkdir -p "${backupDir}"
+cd "${backupDir}"
 
-HERE=$(dirname $(readlink -f "$0"))
-PATH=$PATH:$HERE
 for dir in "${dirs[@]}"; do
-	timemachine "home:${raidDir}/" "./${dir}/"
+	mkdir -p "./${dir}"
+	timemachine "home-local:${raidDir}/${dir}/" "./${dir}/"
 done
 
-hardlink --keep-oldest --ignore-time .
+# Not doing "--content" because the results may be unpredictable
+hardlink --keep-oldest --ignore-time --minimum-size 1MiB .

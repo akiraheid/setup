@@ -1,8 +1,8 @@
 # Setup
 Repository for my setup.
 
-Install with
+To configure for a PC, run
 
 ```
-$ curl -o- https://raw.githubusercontent.com/akiraheid/setup/configure.sh | bash
+$ curl -o- https://raw.githubusercontent.com/akiraheid/setup/pc.sh | bash
 ```

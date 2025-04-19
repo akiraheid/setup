@@ -1,0 +1,8 @@
+#!/bin/bash
+# Update the OS and remove unused packages.
+set -e
+
+apt-get -y update
+apt-get -y upgrade
+apt-get -y dist-upgrade
+apt-get -y autoremove
