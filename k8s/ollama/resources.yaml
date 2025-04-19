@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  labels:
+    app: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      containers:
+      - name: ollama
+        image: docker.io/ollama/ollama:0.6.6
+        ports:
+        - containerPort: 11434
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama
+spec:
+  selector:
+    app.kubernetes.io/name: ollama
+  ports:
+    - port: 11434
+      targetPort: http
+  type: LoadBalancer
+---
