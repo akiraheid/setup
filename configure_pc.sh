@@ -17,12 +17,9 @@ fatal() {
 setup_env() {
     # Use sudo if we are not already root
     SUDO=sudo
-    if [ $(id -u) -eq 0 ]; then
+    if [ "$(id -u)" -eq 0 ]; then
         SUDO=
     fi
-
-	# Define where we expect this user's binaries to be
-	USR_BIN_DIR=~/.local/bin
 }
 
 # Update system
@@ -42,7 +39,7 @@ install_bash_settings() {
 	cp --suffix="${date}" ./bash/bash_profile ~/.bash_profile
 	cp --suffix="${date}" ./bash/profile ~/.profile
 
-	d=~/.local/bin
+	d=${HOME}/.local/bin
 	mkdir -p "${d}"
 	cp --suffix="${date}" ./bin/oil "${d}/oil"
 	cp --suffix="${date}" ./bin/syncthing "${d}/syncthing"
@@ -60,16 +57,41 @@ install_podman() {
 install_vim() {
 	info "Installing vim..."
 	$SUDO apt-get -y install vim
+	date=$(date +%Y%m%d-%H%M%S)
+	cp --suffix="${date}" ./vim/vimrc ~/.vimrc
+	info "Installed vim and vim configuration"
 
 	autoloadDir=${HOME}/.vim/autoload
-	mkdir -p "${autoloadDir}"
+	bundleDir=${HOME}/.vim/bundle
+	mkdir -p "$autoloadDir" "$bundleDir"
 
-	echo "Installing pathogen..."
-	pathogen=/pathogen.vim
+	info "Installing vim plugins..."
+	pathogen=pathogen.vim
 	if [ ! -f "${autoloadDir}/${pathogen}" ]; then
 		cp "./vim/${pathogen}" "${autoloadDir}/${pathogen}"
 	fi
-	info "Installed vim and vim configuration"
+	tmpdir=$(mktemp -d)
+	cp ./vim/plugins.sha256 "${tmpdir}/"
+	pushd "$tmpdir"
+
+	cfn=syntastic.tar.gz
+	v=3.10.0
+	if [ ! -f "$cfn" ]; then
+		wget -O "$cfn" "https://github.com/vim-syntastic/syntastic/archive/refs/tags/${v}.tar.gz"
+	fi
+
+	sha256sum -c plugins.sha256
+
+	info "Installing syntastic"
+	tar -xf "$cfn" -C "${bundleDir}/"
+
+	pushd "$bundleDir"
+	mv "syntastic-${v}" "syntastic"
+	popd # bundleDir
+
+	popd # tmpdir
+	rm -r "$tmpdir"
+	info "Installed vim plugins"
 }
 
 # Install tmux and settings
@@ -91,8 +113,8 @@ install_decoaps() {
 	fi
 
 	# Work in the repos directory, since that's where I'll edit things anyway
-	mkdir -p ~/repos
-	pushd ~/repos
+	mkdir -p "${HOME}/repos"
+	pushd "${HOME}/repos"
 
 	git clone https://github.com/akiraheid/containerfiles.git
 	pushd containerfiles
