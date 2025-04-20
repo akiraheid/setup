@@ -177,6 +177,60 @@ install_decoaps() {
 #    firewallcmd(['--remove-service', 'ssh'])
 #}
 
+# Install k8s and tools
+install_k8s() {
+	k3sVersion=v1.31.6+k3s1
+	k8sGroup=k8s
+
+	info "Creating k8s group and adding $USER..."
+	$SUDO groupadd -f --system "$k8sGroup" --users "$USER"
+
+	# Configure image storage, container files, and persistent volumes to be
+	# backed by a larger drive instead of using the OS directories.
+	mntDir=/mnt/k8s
+
+	info "Setting up kubelet filesystem..."
+	kubeletDir="${mntDir}/kubelet"
+	$SUDO mkdir -p "$kubeletDir"
+
+	info "Setting up persistent volume filesystem..."
+	pvDir="${mntDir}/local-storage"
+	$SUDO mkdir -p "${pvDir}"
+
+	info "Setting up data filesystem..."
+	dataDir="${mntDir}/data"
+
+	info "Installing single-node k3s..."
+	INSTALL_K3S_VERSION="$k3sVersion" \
+		INSTALL_K3S_EXEC="--kubelet-arg root-dir=${kubeletDir}" \
+		./k8s/k3sInstaller.sh \
+			--default-local-storage-path "$pvDir" \
+			--data-dir "$dataDir" \
+			--write-kubeconfig-group "$k8sGroup" \
+			--write-kubeconfig-mode 640
+
+
+	# See https://github.com/k3s-io/k3s/issues/2068#issuecomment-1374672584 for
+	# more information.
+	#
+	## containerd has a root and state directory
+	## - https://github.com/containerd/containerd/blob/main/docs/ops.md#base-configuration
+	##
+	## containerd root -> /var/lib/rancher/k3s/agent/containerd
+	#info "Setting up containerd root filesystem..."
+	#CONTAINERD_ROOT_DIR_OLD="/var/lib/rancher/k3s/agent"
+	#CONTAINERD_ROOT_DIR_NEW="${mntDir}/containerd-root/containerd"
+	#$SUDO mkdir -p "${CONTAINERD_ROOT_DIR_OLD}" "${CONTAINERD_ROOT_DIR_NEW}"
+	#$SUDO ln -s "${CONTAINERD_ROOT_DIR_NEW}" "${CONTAINERD_ROOT_DIR_OLD}"
+
+	## containerd state -> /run/k3s/containerd
+	#info "Setting up containerd state filesystem..."
+	#CONTAINERD_STATE_DIR_OLD="/run/k3s"
+	#CONTAINERD_STATE_DIR_NEW="${mntDir}/containerd-state/containerd"
+	#$SUDO mkdir -p "${CONTAINERD_STATE_DIR_OLD}" "${CONTAINERD_STATE_DIR_NEW}"
+	#$SUDO ln -s "${CONTAINERD_STATE_DIR_NEW}" "${CONTAINERD_STATE_DIR_OLD}"
+}
+
 # Start configuration
 {
 	setup_env
@@ -186,4 +240,6 @@ install_decoaps() {
 	install_vim
 	install_podman
 	install_decoaps
+	install_k8s
+	info "Restart computer to use kubectl"
 }
