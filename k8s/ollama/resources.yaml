@@ -34,15 +34,22 @@ spec:
       labels:
         app: ollama
     spec:
+      runtimeClassName: nvidia
       containers:
       - name: ollama
         image: docker.io/ollama/ollama:0.6.6
+        env:
+        - name: OLLAMA_CONTEXT_LENGTH
+          value: "9000"
         ports:
         - containerPort: 11434
           name: http
         volumeMounts:
           - name: ollama
             mountPath: /root/.ollama
+        resources:
+          limits:
+            nvidia.com/gpu: 1
       volumes:
         - name: ollama
           persistentVolumeClaim:

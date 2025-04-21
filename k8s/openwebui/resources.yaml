@@ -35,23 +35,23 @@ spec:
         app: open-webui
     spec:
       containers:
+      - name: open-webui
+        image: ghcr.io/open-webui/open-webui:v0.6.5
+        env:
+        - name: K8S_FLAG
+          value: "true"
+        - name: OLLAMA_BASE_URLS
+          value: "http://ollama.ollama.svc.cluster.local"
+        ports:
+        - containerPort: 8080
+          name: frontend
+        volumeMounts:
         - name: open-webui
-          image: ghcr.io/open-webui/open-webui:v0.6.5
-          env:
-            - name: K8S_FLAG
-              value: "true"
-            - name: OLLAMA_BASE_URLS
-              value: "http://ollama.ollama.svc.cluster.local"
-          ports:
-            - containerPort: 8080
-              name: frontend
-          volumeMounts:
-            - name: open-webui
-              mountPath: /app/backend/data
+          mountPath: /app/backend/data
       volumes:
-        - name: open-webui
-          persistentVolumeClaim:
-            claimName: open-webui
+      - name: open-webui
+        persistentVolumeClaim:
+          claimName: open-webui
 ---
 apiVersion: v1
 kind: Service
