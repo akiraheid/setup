@@ -34,22 +34,30 @@ spec:
       labels:
         app: ollama
     spec:
-      runtimeClassName: nvidia
+      # Re-enable when available
+      #runtimeClassName: nvidia
       containers:
       - name: ollama
         image: docker.io/ollama/ollama:0.6.6
         env:
         - name: OLLAMA_CONTEXT_LENGTH
-          value: "9000"
+          value: "13000"
         ports:
         - containerPort: 11434
           name: http
+        resources:
+          requests:
+            cpu: "3"
+            memory: "10Gi"
+          limits:
+            cpu: "5"
+            memory: "14Gi"
         volumeMounts:
           - name: ollama
             mountPath: /root/.ollama
-        resources:
-          limits:
-            nvidia.com/gpu: 1
+        #resources:
+        #  limits:
+        #    nvidia.com/gpu: 1
       volumes:
         - name: ollama
           persistentVolumeClaim:
