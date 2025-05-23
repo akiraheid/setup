@@ -38,7 +38,7 @@ spec:
       #runtimeClassName: nvidia
       containers:
       - name: ollama
-        image: docker.io/ollama/ollama:0.6.6
+        image: docker.io/ollama/ollama:0.7.0
         env:
         - name: OLLAMA_CONTEXT_LENGTH
           value: "13000"
