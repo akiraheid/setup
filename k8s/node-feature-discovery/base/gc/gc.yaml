@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nfd
+  name: nfd-gc
+spec:
+  selector:
+    matchLabels:
+      app: nfd-gc
+  template:
+    metadata:
+      labels:
+        app: nfd-gc
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      serviceAccount: nfd-gc
+      containers:
+        - name: nfd-gc
+          image: registry.k8s.io/nfd/node-feature-discovery:v0.17.3
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 20m
+              memory: 1Gi
+            requests:
+              cpu: 10m
+              memory: 128Mi
+          command:
+            - "nfd-gc"
+          ports:
+            - name: metrics
+              containerPort: 8081
