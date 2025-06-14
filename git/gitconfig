@@ -1,6 +1,43 @@
+[column]
+	ui = auto
+[commit]
+	gpgsign = true
+	verbose = true
+[core]
+	fsmonitor = true
+	untrackedCache = true
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[gpg]
+	format = ssh
 [init]
 	defaultBranch = master
-
+[merge]
+	conflictstyle = zdiff3
+[pull]
+	rebase = true
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[tag]
+	gpgsign = true
+	sort = version:refname
 [user]
 	name = Rock
 	email = rock@rock.rock
+	signingkey = ~/.ssh/id_ed25519.pub
