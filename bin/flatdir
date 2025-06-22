@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""Flatten files nested in directories."""
+
+from argparse import ArgumentParser
+import os
+from shutil import copyfile
+
+def parse_args():
+    """Parse arguments"""
+    parser = ArgumentParser()
+    parser.add_argument("filepath", type=str, nargs="+")
+    parser.add_argument("--prefix", type=str, default="")
+    return parser.parse_args()
+
+def get_flattened_paths(filepaths, prefix=""):
+    """Move files nested in directories to the root level while avoiding name
+    collisions."""
+    result = []
+    if prefix:
+        prefix = f"{prefix}-"
+    for fp in filepaths:
+        if fp.startswith("./"):
+            fp = fp[2:]
+
+        fp = fp.replace(os.sep, "-")
+        result.append(f"{prefix}{fp}")
+
+    return result
+
+def main():
+    """main"""
+    args = parse_args()
+    files = args.filepath
+    paths = get_flattened_paths(files, prefix=args.prefix)
+    for fp, flatfp in zip(files, paths):
+        print(f"{fp} -> {flatfp}")
+        copyfile(fp, flatfp)
+
+if __name__ == "__main__":
+    main()
