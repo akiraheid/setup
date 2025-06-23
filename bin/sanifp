@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -e
+
+function print_help() {
+	echo "Given a file path, convert invalid file name characters into an"
+	echo "underscore and rename the directories and file."
+	echo ""
+	echo "The valid characters in a file name are [a-zA-Z0-9_-.]"
+	echo ""
+	echo "Usage: sanifp filepath"
+	echo ""
+	echo "Examples:"
+	echo "  $ sanifp ./some-dir/my&file.txt"
+	echo "  ./some-dir/my&file:3-2.txt -> ./some-dir/my_file_3-2.txt"
+}
+
+if [ $# != 1 ]; then
+	print_help
+	exit 1
+fi
+
+fp=$1
+filename=$(basename "$fp" | cut -d '.' -f 1)
+ext=$(basename "$fp" | cut -d '.' -f 2)
+newfp=$(dirname "$fp")/${filename//[^a-zA-Z0-9_.-]/_}.${ext}
+
+mv -v "$fp" "$newfp"
