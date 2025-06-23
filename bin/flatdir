@@ -1,13 +1,35 @@
 #!/usr/bin/env python3
 """Flatten files nested in directories."""
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawTextHelpFormatter
 import os
 from shutil import copyfile
 
 def parse_args():
     """Parse arguments"""
-    parser = ArgumentParser()
+    desc = \
+"""Flatten the directory structure for the given files, using the directory name
+as the file name.
+
+For example, the files in the following directory structure:
+  dir1
+  |-dir1
+  |  |-dir1
+  |  |  `-file1.txt
+  |  `-file1.txt
+  |-dir2
+  |  `-file1.txt
+  `-file1.txt
+
+Would be converted to the following:
+  dir1-dir1-dir1-file1.txt
+  dir1-dir2-file1.txt
+  dir1-dir1-file1.txt
+  dir1-file1.txt
+"""
+    parser = ArgumentParser(prog="flatdir",
+                            description=desc,
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument("filepath", type=str, nargs="+")
     parser.add_argument("--prefix", type=str, default="")
     return parser.parse_args()
