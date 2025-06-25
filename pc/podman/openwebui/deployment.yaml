@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: openwebui
+  name: openwebui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openwebui
+  template:
+    metadata:
+      labels:
+        app: openwebui
+    spec:
+      containers:
+      - name: open-webui
+        image: ghcr.io/open-webui/open-webui:0.6.15
+        env:
+        - name: OLLAMA_BASE_URL
+          value: http://127.0.0.1:11434
+        ports:
+        - containerPort: 8080
+          hostPort: 8086
+        volumeMounts:
+        - mountPath: /app/backend/data/
+          name: openwebui-data
+      - name: ollama
+        image: docker.io/ollama/ollama:0.9.2
+        args:
+        - serve
+        ports:
+        - containerPort: 11434
+          hostPort: 11434
+        volumeMounts:
+        - mountPath: /root/.ollama/
+          name: ollama-data
+      hostname: openwebui
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /mnt/ollama/data
+          type: Directory
+        name: ollama-data
+      - hostPath:
+          path: /mnt/openwebui/data
+          type: Directory
+        name: openwebui-data
