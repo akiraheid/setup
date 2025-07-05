@@ -6,8 +6,8 @@ Repository for my setup.
 
 To configure for a PC, run
 
-```bash
-$ curl -o- https://raw.githubusercontent.com/akiraheid/setup/pc.sh | bash
+```text
+wget -O - https://raw.githubusercontent.com/akiraheid/setup/refs/heads/master/pc.sh | bash
 ```
 
 ## Home Server

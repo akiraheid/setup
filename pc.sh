@@ -1,8 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Download the repo and execute the PC configuration script
 #
-# This script is meant to be run via
-#   curl -o- https://github.com/akiraheid/setup/master/pc.sh | bash
+# This script can be called in several ways:
+#
+#   wget -O - https://github.com/akiraheid/setup/master/pc.sh | bash
+#
+# or
+#
+#   ./pc.sh
 set -e
 
 info() {
@@ -20,7 +25,7 @@ fatal() {
 setup_env() {
     # Use sudo if we are not already root
     SUDO=sudo
-    if [ $(id -u) -eq 0 ]; then
+    if [ "$(id -u)" -eq 0 ]; then
         SUDO=
     fi
 }
@@ -42,7 +47,7 @@ install_git() {
 		info "Installing git"
 		$SUDO apt-get install -y git
 	else
-		info "Skipping git install, command exists in PATH at ${which_cmd}"
+		info "git exists at ${which_cmd}"
 	fi
 }
 
@@ -58,9 +63,15 @@ run_script() {
 	./configure_pc.sh
 }
 
+# Disable the disk package source from apt
+disable_disk_source() {
+	$SUDO sed -i 's/^deb cdrom/#deb cdrom/g' /etc/apt/sources.list
+}
+
 # Start configuration
 {
 	setup_env
+	disable_disk_source
 	update_system
 	install_git
 	clone_repo
