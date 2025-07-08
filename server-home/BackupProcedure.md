@@ -21,6 +21,8 @@ This document specifies how home server backups are performed and why.
 
 Copy the latest local backup to offsite backup storage.
 
+This is done via syncthing with a server in California.
+
 ## 3.2 Full Backup
 
 1. Frequency: Weekly
@@ -28,9 +30,7 @@ Copy the latest local backup to offsite backup storage.
 3. Locations: Local
 4. Rationale: Fast, uses minimal storage space because of hard linking.
 
-Perform a backup with [`timemachine`](https://github.com/cytopia/linux-timemachine) to a local HDD.
-
-A copy of `timemachine` is included in this repo.
+Perform a backup with `backupRaid.sh` to a local HDD.
 
 # 4. Retention Policy
 
