@@ -4,7 +4,7 @@ set -e
 # Install k3s and any relevant GPU support software
 #
 # Usage:
-#   install_k3s.sh [options] [agent|server]
+#   install_k3s.sh [agent|server] [options]
 #
 # Specify [agent] when adding an agent node.
 # Specify [server] if adding a server node.
@@ -22,10 +22,10 @@ set -e
 #
 # Examples:
 #   Install and start a new cluster
-#     install_k3s.sh --token xxx --cluster-init server
+#     install_k3s.sh server --token xxx --cluster-init
 #
 #   Install as an agent joining an existing cluster
-#     install_k3s.sh --token xxx --server https://example.com:6443 agent
+#     install_k3s.sh agent --token xxx --server https://example.com:6443
 
 info() {
     echo '[INFO] ' "$@"
@@ -134,11 +134,13 @@ install_k3s() {
 
 	info "Installing single-node k3s..."
 	$SUDO INSTALL_K3S_VERSION="$k3sVersion" \
+		K3S_KUBECONFIG_MODE=640 \
+		K3S_KUBECONFIG_GROUP=k8s \
 		./k3sInstaller.sh \
+			"$@" \
 			--write-kubeconfig-group k8s \
 			--write-kubeconfig-mode 640 \
-			--kubelet-arg "root-dir=${kubeletDir}" \
-			"$@"
+			--kubelet-arg "root-dir=${kubeletDir}"
 
 	# k3s installer sets to 644 by default, which exposes the token
 	$SUDO chmod 640 /etc/systemd/system/k3s.service
