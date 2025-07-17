@@ -87,7 +87,7 @@ install_k8s_nvidia_resources() {
 	$SUDO ctr image pull "$cudaImg"
 	$SUDO ctr run --rm --gpus 0 -t "$cudaImg" cuda-${cudaVer} nvidia-smi
 
-	kubectl apply -f ./k8s/nvidia/resources.yaml
+	kubectl apply -f ./nvidia/resources.yaml
 }
 
 # Install k3s and tools
