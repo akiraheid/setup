@@ -95,7 +95,6 @@ install_k3s() {
 	check_gpu
 
 	# Trying https://radicalgeek.co.uk/pi-cluster/adding-a-gpu-node-to-a-k3s-cluster/
-
 	[ "$GPU_TYPE" == "nvidia" ] && install_nvidia_container_toolkit
 
 	# Install k3s
@@ -134,16 +133,9 @@ install_k3s() {
 
 	info "Installing single-node k3s..."
 	$SUDO INSTALL_K3S_VERSION="$k3sVersion" \
-		K3S_KUBECONFIG_MODE=640 \
-		K3S_KUBECONFIG_GROUP=k8s \
 		./k3sInstaller.sh \
 			"$@" \
-			--write-kubeconfig-group k8s \
-			--write-kubeconfig-mode 640 \
 			--kubelet-arg "root-dir=${kubeletDir}"
-
-	# k3s installer sets to 644 by default, which exposes the token
-	$SUDO chmod 640 /etc/systemd/system/k3s.service
 
 	[ "$GPU_TYPE" == "nvidia" ] && install_k8s_nvidia_resources
 }
