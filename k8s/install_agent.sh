@@ -38,6 +38,8 @@ install() {
 
 	# k3s installer sets to 644 by default, which exposes the token
 	$SUDO chmod 640 /etc/systemd/system/k3s-agent.service
+	# Consider getting the important info into k3s-agent.service.env instead
+	# because that seems to default to 600 even if the install command hangs
 }
 
 # Start configuration

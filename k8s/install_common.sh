@@ -92,10 +92,10 @@ install_k8s_nvidia_resources() {
 
 # Install k3s and tools
 install_k3s() {
-	check_gpu
+	#check_gpu
 
 	# Trying https://radicalgeek.co.uk/pi-cluster/adding-a-gpu-node-to-a-k3s-cluster/
-	[ "$GPU_TYPE" == "nvidia" ] && install_nvidia_container_toolkit
+	#[ "$GPU_TYPE" == "nvidia" ] && install_nvidia_container_toolkit
 
 	# Install k3s
 	k3sVersion=v1.31.6+k3s1
@@ -131,13 +131,18 @@ install_k3s() {
 	$SUDO mkdir -p "$PV_DIR_NEW" "$PV_DIR_OLD"
 	$SUDO ln -sf "$PV_DIR_NEW" "$PV_DIR_OLD"
 
+	# csi-nfs-controller requires these directories but doesn't create them.
+	# Not creating them causes the csi-nfs-node pods not to deploy because it
+	# cannot find the directories
+	$SUDO mkdir -p /var/lib/kubelet/pods /var/lib/kubelet/plugins_registry
+
 	info "Installing single-node k3s..."
 	$SUDO INSTALL_K3S_VERSION="$k3sVersion" \
 		./k3sInstaller.sh \
 			"$@" \
 			--kubelet-arg "root-dir=${kubeletDir}"
 
-	[ "$GPU_TYPE" == "nvidia" ] && install_k8s_nvidia_resources
+	#[ "$GPU_TYPE" == "nvidia" ] && install_k8s_nvidia_resources
 }
 
 # Start configuration
