@@ -1,0 +1,30 @@
+#!/bin/bash
+# Copy FIT files from Garmin watch to local storage
+# Run this script from within the Garmin device root directory
+#
+# Generally, the device can be found at
+# /run/usr/$(id -u)/gvfs/mtp:host=[UUID]/Internal Storage
+set -e
+
+# Make sure target directories exist
+# Activities: Recordings of recorded activities.
+# Device: Not sure
+# HRVStatus: Heart Rate Variability metrics.
+# Metrics: Not sure
+# Monitor: Not sure
+# Sleep: Recordings of sleep metrics.
+# SlpDisr: Not sure
+# SkinTemp: Skin temperature metrics.
+TGT_DIR=~/Garmin/metrics
+mkdir -p "${TGT_DIR}"/{Activity,Device,HRVStatus,Metrics,Monitor,Sleep,SlpDisr,SkinTemp}
+
+# Enter directory where all metrics are stored.
+cd ./GARMIN
+rsync ./Activity/*.fit "${TGT_DIR}"/Activity/
+rsync ./Device/*.FIT "${TGT_DIR}"/Device/
+rsync ./HRVStatus/*.fit "${TGT_DIR}"/HRVStatus/
+rsync ./Metrics/*.fit "${TGT_DIR}"/Metrics/
+rsync ./Monitor/*.FIT "${TGT_DIR}"/Monitor/
+rsync ./Sleep/*.fit "${TGT_DIR}"/Sleep/
+rsync ./SlpDisr/*.fit "${TGT_DIR}"/SlpDisr/
+rsync ./SkinTemp/*.fit "${TGT_DIR}"/SkinTemp/
