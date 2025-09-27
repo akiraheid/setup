@@ -6,4 +6,4 @@ set -e
 		-v ~/Downloads/ollama:/root/.ollama:rw \
 		-p 11434:11434 \
 		--name ollama \
-		docker.io/ollama/ollama:latest
+		docker.io/ollama/ollama:0.12.3
