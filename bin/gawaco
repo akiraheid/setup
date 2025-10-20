@@ -3,7 +3,7 @@
 # Run this script from within the Garmin device root directory
 #
 # Generally, the device can be found at
-# /run/usr/$(id -u)/gvfs/mtp:host=[UUID]/Internal Storage
+# /run/user/$(id -u)/gvfs/mtp:host=[UUID]/Internal Storage
 set -e
 
 # Make sure target directories exist
