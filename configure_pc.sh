@@ -132,6 +132,42 @@ install_decoaps() {
 	info "Installed decoaps"
 }
 
+# Avahi is used for mDNS to resolve hosts via [hostname].local without a DNS
+# DNS server on the local network.
+setup_mDNS() {
+	$SUDO apt-get install -y avahi-daemon libnss-mdns
+}
+
+# Set up wireguard for connecting to the NAS via NFS.
+setup_wireguard() {
+	# Configuring based on https://d.sb/2020/12/nfs-howto
+	info "Installing wireguard"
+	$SUDO apt-get install -y wireguard
+
+	local wg_dir
+	local prikey
+	local pubkey
+	wg_dir=/etc/wireguard
+	prikey=${wg_dir}/wg-privatekey
+	pubkey=${wg_dir}/wg-publickey
+	mkdir -p "${wg_dir}"
+
+	wg genkey | $SUDO tee "${prikey}" | wg pubkey | $SUDO tee "${pubkey}"
+
+	cat << EOF > "${wg_dir}/wg0.conf"
+[Interface]
+Address = 10.222.0.2/24
+PrivateKey = $($SUDO cat ${prikey})
+ListenPort = 51820
+EOF
+	info "Each peer must still be added to the ${wg_dir}/wg0.conf file under"
+	info "a [Peer] section. For example:"
+	info "  [Peer]"
+	info "  PublicKey = abcdefghijklmnopqrstuvwxyz="
+	info "  Endpoint = hostname.local:51820"
+	info "  AllowedIPs = 10.222.0.1/32"
+}
+
 #setup_firewall() {
 #    # Regardless of how dynamic your network environment may be, it is still
 #    # useful to be familiar with the general idea behind each of the predefined
@@ -186,5 +222,7 @@ install_decoaps() {
 	install_vim
 	install_podman
 	install_decoaps
+	setup_mDNS
+	setup_wireguard
 	info "Restart computer to use kubectl"
 }
