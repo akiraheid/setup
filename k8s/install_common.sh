@@ -136,7 +136,7 @@ install_k3s() {
 	# cannot find the directories
 	$SUDO mkdir -p /var/lib/kubelet/pods /var/lib/kubelet/plugins_registry
 
-	info "Installing single-node k3s..."
+	info "Installing k3s..."
 	$SUDO INSTALL_K3S_VERSION="$k3sVersion" \
 		./k3sInstaller.sh \
 			"$@" \
