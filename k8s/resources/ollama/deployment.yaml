@@ -26,18 +26,17 @@ spec:
           name: http
         resources:
           requests:
-            cpu: "5"
-            memory: "10Gi"
+            cpu: "100m"
+            memory: "20Mi"
+            nvidia.com/gpu: 1
           limits:
-            cpu: "20"
-            memory: "13Gi"
+            cpu: "1"
+            memory: "100Mi"
+            nvidia.com/gpu: 1
         volumeMounts:
           - name: ollama-data
             mountPath: /root/.ollama
             readOnly: false
-        #resources:
-        #  limits:
-        #    nvidia.com/gpu: 1
       volumes:
         - name: ollama-data
           persistentVolumeClaim:
