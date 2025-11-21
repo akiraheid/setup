@@ -12,6 +12,20 @@ info() {
 
 THIS_DIR=$(dirname "$(readlink -f "$0")")
 
+install_csidrivernfs() {
+	resourceDir=${THIS_DIR}/resources/csi-driver-nfs-4.12.1
+	pushd "$resourceDir"
+	bash ./install.sh
+	popd
+}
+
+install_ollama() {
+	resourceDir=${THIS_DIR}/resources/ollama
+	pushd "$resourceDir"
+	bash ./install.sh
+	popd
+}
+
 install_nfd() {
 	kubectl apply -k "${THIS_DIR}/resources/node-feature-discovery-0.16.4/deployment/overlays/default"
 
@@ -23,13 +37,6 @@ install_nfd() {
 			--no-headers \
 			-o custom-columns=:.status.phase \
 		| grep -v Running) || true
-}
-
-install_csidrivernfs() {
-	resourceDir=${THIS_DIR}/resources/csi-driver-nfs-4.12.1
-	pushd "$resourceDir"
-	bash ./install.sh
-	popd
 }
 
 install_nvidiagpuoperator() {
@@ -46,4 +53,7 @@ install_nvidiagpuoperator() {
 	install_nfd
 	install_nvidiagpuoperator
 	install_csidrivernfs
+
+	# Depends on csi-driver-nfs and nvidia-gpu-operator
+	install_ollama
 }

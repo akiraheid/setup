@@ -15,13 +15,9 @@ spec:
       labels:
         app: ollama
     spec:
-      # Re-enable when available
-      #runtimeClassName: nvidia
-      nodeSelector:
-        workload-ai: "true"
       containers:
       - name: ollama
-        image: docker.io/ollama/ollama:0.11.8
+        image: docker.io/ollama/ollama:0.13.0
         env:
         - name: OLLAMA_CONTEXT_LENGTH
           value: "13000"

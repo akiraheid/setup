@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
+  name: ollama-pv
+  namespace: ollama
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 200Gi
+  claimRef:
+    name: ollama-data
+    namespace: ollama
+  csi:
+    driver: nfs.csi.k8s.io
+    # volumeHandle format: {nfs-server-address}#{sub-dir-name}#{share-name}
+    # Make sure this value is unique for every share in the cluster
+    volumeHandle: 10.222.0.1#ollama-data#/raid/k8snfs
+    volumeAttributes:
+      server: 10.222.0.1
+      share: /raid/k8snfs
+  mountOptions:
+    - nfsvers=4.2
+  # We want to delete the data when we completely remove the PV.
+  storageClassName: nfs-delete
+  volumeMode: Filesystem
