@@ -25,6 +25,13 @@ install_nfd() {
 		| grep -v Running) || true
 }
 
+install_csidrivernfs() {
+	resourceDir=${THIS_DIR}/resources/csi-driver-nfs-4.12.1
+	pushd "$resourceDir"
+	bash ./install.sh
+	popd
+}
+
 install_nvidiagpuoperator() {
 	resourceDir=${THIS_DIR}/resources/nvidia-gpu-operator-25.10.0
 	kubectl apply -k "${resourceDir}"

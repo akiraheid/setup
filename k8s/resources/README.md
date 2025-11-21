@@ -14,7 +14,14 @@ chart allows for:
 
 To generate a resource YAML file from a Helm chart, use `helm template`.
 
-    helm template --namespace a-namespace --version=1.2.3 author/chart > resource.yaml
+```bash
+helm template \
+    --include-crds \
+    --namespace a-namespace \
+    --version=1.2.3 \
+    [chart opts] \
+    author/chart > resources.yaml
+```
 
 Although `--namespace` is an argument, it does not actually generate a Namespace
 on the cluster when the resources are deployed. Create a `namespace.yaml` and

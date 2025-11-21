@@ -111,7 +111,9 @@ install_k3s() {
 
 	info "Setting up kubelet filesystem..."
 	kubeletDir="${mntDir}/kubelet"
+	KUBELET_DIR_OLD=/var/lib/kubelet
 	$SUDO mkdir -p "$kubeletDir"
+	$SUDO ln -sf "$kubeletDir" "$KUBELET_DIR_OLD"
 
 	info "Setting up containerd root filesystem..."
 	C_ROOT_DIR_OLD=/var/lib/rancher/k3s/agent
@@ -131,16 +133,10 @@ install_k3s() {
 	$SUDO mkdir -p "$PV_DIR_NEW" "$PV_DIR_OLD"
 	$SUDO ln -sf "$PV_DIR_NEW" "$PV_DIR_OLD"
 
-	# csi-nfs-controller requires these directories but doesn't create them.
-	# Not creating them causes the csi-nfs-node pods not to deploy because it
-	# cannot find the directories
-	$SUDO mkdir -p /var/lib/kubelet/pods /var/lib/kubelet/plugins_registry
-
 	info "Installing k3s..."
 	$SUDO INSTALL_K3S_VERSION="$k3sVersion" \
 		./k3sInstaller.sh \
-			"$@" \
-			--kubelet-arg "root-dir=${kubeletDir}"
+			"$@"
 
 	#[ "$GPU_TYPE" == "nvidia" ] && install_k8s_nvidia_resources
 }
