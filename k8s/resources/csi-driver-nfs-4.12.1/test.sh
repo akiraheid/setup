@@ -6,7 +6,9 @@ set -e
 THIS_DIR=$(dirname "$(readlink -f "$0")")
 
 kubectl rollout status --watch --timeout=10s -n kube-system deployment/csi-nfs-controller
-kubectl get pod -n kube-system -l app=csi-nfs-node | grep -v 'Running'
+if kubectl get pod -n kube-system -l app=csi-nfs-node --no-headers | grep -v 'Running' ; then
+	exit 1
+fi
 
 kubectl apply -f "${THIS_DIR}/test.yaml"
 

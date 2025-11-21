@@ -9,7 +9,7 @@ spec:
   resources:
     requests:
       storage: 5Mi
-  storageClassName: nfs-retain
+  storageClassName: nfs-delete
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -34,6 +34,8 @@ spec:
       - name: alpine
         image: docker.io/library/alpine:latest
         imagePullPolicy: IfNotPresent
+        command: [ "sleep" ]
+        args: [ "infinity" ]
         resources:
           requests:
             cpu: "50m"
@@ -44,7 +46,7 @@ spec:
         volumeMounts:
           - name: nfs-test
             mountPath: /var/nfstest
-            readOnly: false
+            readOnly: true
       volumes:
         - name: nfs-test
           persistentVolumeClaim:
