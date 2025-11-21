@@ -45,4 +45,5 @@ install_nvidiagpuoperator() {
 {
 	install_nfd
 	install_nvidiagpuoperator
+	install_csidrivernfs
 }
