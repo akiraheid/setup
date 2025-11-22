@@ -41,3 +41,13 @@ application-version/
 |_namespace.yaml
 |_resources.yaml
 ```
+
+## Using NFS StorageClass
+
+It is important that applications that define PersistentVolumes backed by the
+NFS server define a `.containers[].volumeMounts[].subPath` so that the
+container's data isn't written to the NFS root.
+
+This is a security issue for misconfigured containers because applications that
+do not specify `.containers[].volumeMounts[].subPath` will be able to access
+the data of other containers.

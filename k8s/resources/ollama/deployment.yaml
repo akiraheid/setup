@@ -20,23 +20,24 @@ spec:
         image: docker.io/ollama/ollama:0.13.0
         env:
         - name: OLLAMA_CONTEXT_LENGTH
-          value: "13000"
+          value: "130000"
         ports:
         - containerPort: 11434
           name: http
         resources:
           requests:
-            cpu: "100m"
-            memory: "20Mi"
+            cpu: "1"
+            memory: "1Gi"
             nvidia.com/gpu: 1
           limits:
-            cpu: "1"
-            memory: "100Mi"
+            cpu: "3"
+            memory: "5Gi"
             nvidia.com/gpu: 1
         volumeMounts:
           - name: ollama-data
             mountPath: /root/.ollama
             readOnly: false
+            subPath: ollama
       volumes:
         - name: ollama-data
           persistentVolumeClaim:

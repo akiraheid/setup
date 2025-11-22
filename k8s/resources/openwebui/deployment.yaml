@@ -35,9 +35,11 @@ spec:
             cpu: "1"
             memory: "5Gi"
         volumeMounts:
-        - name: openwebui
+        - name: openwebui-data
           mountPath: /app/backend/data
+          readOnly: false
+          subPath: openwebui
       volumes:
-      - name: openwebui
+      - name: openwebui-data
         persistentVolumeClaim:
           claimName: openwebui-data
