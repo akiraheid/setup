@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openwebui-data
+  namespace: openwebui
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  # Empty string must be explicitly set, otherwise the default StorageClass
+  # would be assigned.
+  storageClassName: ""
+  # Always bind to this pre-existing PV to avoid creating new dynamic PVs
+  volumeName: openwebui-pv
