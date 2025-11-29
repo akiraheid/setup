@@ -2,7 +2,7 @@
 #
 # Convert a web page to Markdown
 
-set -ex
+set -e
 
 if [[ ! $# == 1 ]]; then
 	echo "Expected URL"
@@ -12,7 +12,7 @@ fi
 URL=$1
 TMP_NAME=$(mktemp)
 chmod 774 "${TMP_NAME}"
-curl -o "${TMP_NAME}" "${URL}"
+curl -o "${TMP_NAME}" --silent "${URL}"
 
 DOMAIN=$(echo "$URL" | cut -d '/' -f 3)
 MD_NAME=${DOMAIN}.md
@@ -25,6 +25,6 @@ html2markdown --domain "${DOMAIN}" \
 		--opt-strong-delimiter="**" \
 	--input "${TMP_NAME}" > "${MD_NAME}"
 
-pymarkdownlnt fix "${MD_NAME}"
+pymarkdownlnt fix "${MD_NAME}" 2>/dev/null
 
 rm "${TMP_NAME}"
