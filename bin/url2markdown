@@ -15,16 +15,16 @@ chmod 774 "${TMP_NAME}"
 curl -o "${TMP_NAME}" "${URL}"
 
 DOMAIN=$(echo "$URL" | cut -d '/' -f 3)
-OUTPUT=${DOMAIN}.md
-touch "${OUTPUT}"
+MD_NAME=${DOMAIN}.md
+touch "${MD_NAME}"
 html2markdown --domain "${DOMAIN}" \
 	--plugin-strikethrough \
 	--plugin-table \
 		--opt-table-header-promotion \
 		--opt-table-newline-behavior=preserve \
 		--opt-strong-delimiter="**" \
-	--input "${TMP_NAME}" > "${OUPTUT}"
+	--input "${TMP_NAME}" > "${MD_NAME}"
 
-pymarkdownlnt fix "${OUTPUT}"
+pymarkdownlnt fix "${MD_NAME}"
 
 rm "${TMP_NAME}"
