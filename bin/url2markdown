@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Convert a web page to Markdown
+
+set -ex
+
+if [[ ! $# == 1 ]]; then
+	echo "Expected URL"
+	exit 1
+fi
+
+URL=$1
+TMP_NAME=$(mktemp)
+chmod 774 "${TMP_NAME}"
+curl -o "${TMP_NAME}" "${URL}"
+
+DOMAIN=$(echo "$URL" | cut -d '/' -f 3)
+OUTPUT=${DOMAIN}.md
+touch "${OUTPUT}"
+html2markdown --domain "${DOMAIN}" \
+	--plugin-strikethrough \
+	--plugin-table \
+		--opt-table-header-promotion \
+		--opt-table-newline-behavior=preserve \
+		--opt-strong-delimiter="**" \
+	--input "${TMP_NAME}" > "${OUPTUT}"
+
+pymarkdownlnt fix "${OUTPUT}"
+
+rm "${TMP_NAME}"
