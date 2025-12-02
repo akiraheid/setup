@@ -41,6 +41,10 @@ shopt -s checkwinsize
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
+if [ -d "${HOME}/.local/share/bash-completions/completions" ]; then
+	. "${HOME}/.local/share/bash-completions/completions/kubectl"
+fi
+
 if [ -f "$HOME/.bash_aliases" ]; then
    . "$HOME/.bash_aliases"
 fi

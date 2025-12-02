@@ -9,6 +9,14 @@ alias kds='kubectl describe service'
 alias kgd='kubectl get deployment'
 alias kgp='kubectl get pod'
 alias kgs='kubectl get service'
+# Add autocomplete for the aliases
+complete -o default -F __start_kubectl k
+complete -o default -F __start_kubectl kdd
+complete -o default -F __start_kubectl kdp
+complete -o default -F __start_kubectl kds
+complete -o default -F __start_kubectl kgd
+complete -o default -F __start_kubectl kgp
+complete -o default -F __start_kubectl kgs
 
 # ls aliases
 alias ll='ls -lhAF'
