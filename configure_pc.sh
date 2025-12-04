@@ -2,24 +2,17 @@
 # Set up PC environment
 set -e
 
-info() {
-    echo '[INFO] ' "$@"
-}
-warn() {
-    echo '[WARN] ' "$@" >&2
-}
-fatal() {
-    echo '[ERROR] ' "$@" >&2
-    exit 1
-}
-
-# Define needed environment variables
+# Define needed environment variables and helper functions
 setup_env() {
     # Use sudo if we are not already root
     SUDO=sudo
     if [ "$(id -u)" -eq 0 ]; then
         SUDO=
     fi
+
+	THIS_DIR=$(dirname "$(readlink -f "$0")")
+
+	. "${THIS_DIR}/bash/logging"
 }
 
 # Update system
@@ -145,32 +138,17 @@ setup_mDNS() {
 
 # Set up wireguard for connecting to the NAS via NFS.
 setup_wireguard() {
-	# Configuring based on https://d.sb/2020/12/nfs-howto
 	info "Installing wireguard"
-	$SUDO apt-get install -y wireguard
+	bash "${THIS_DIR}/bin/installWireguard.sh"
 
-	local wg_dir
-	local prikey
-	local pubkey
-	wg_dir=/etc/wireguard
-	prikey=${wg_dir}/wg-privatekey
-	pubkey=${wg_dir}/wg-publickey
-	mkdir -p "${wg_dir}"
+	# Not the NAS, so change to a client IP
+	$SUDO sed -i 's#10.222.0.1/24#10.222.0.2/24#' /etc/wireguard/wg0.conf
 
-	wg genkey | $SUDO tee "${prikey}" | wg pubkey | $SUDO tee "${pubkey}"
-
-	cat << EOF > "${wg_dir}/wg0.conf"
-[Interface]
-Address = 10.222.0.2/24
-PrivateKey = $($SUDO cat ${prikey})
-ListenPort = 51820
-EOF
-	info "Each peer must still be added to the ${wg_dir}/wg0.conf file under"
-	info "a [Peer] section. For example:"
-	info "  [Peer]"
-	info "  PublicKey = abcdefghijklmnopqrstuvwxyz="
-	info "  Endpoint = hostname.local:51820"
-	info "  AllowedIPs = 10.222.0.1/32"
+	info "Update the NAS IP with this client peer information"
+	echo "[Peer]"
+	echo "PublicKey = $(/etc/wireguard/publickey)"
+	echo "Endpoint = nas01:51820"
+	echo "AllowedIPs = 10.222.0.2/32"
 }
 
 #setup_firewall() {
