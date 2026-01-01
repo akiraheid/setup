@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: openwebui
+spec:
+  containers:
+  - name: ollama
+    image: docker.io/ollama/ollama:0.13.5
+    env:
+    - name: OLLAMA_CONTEXT_LENGTH
+      value: "130000"
+    ports:
+    - containerPort: 11434
+      hostPort: 11434
+    resources:
+      requests:
+        cpu: "1"
+        memory: "8Gi"
+      limits:
+        cpu: "7"
+        memory: "15Gi"
+    volumeMounts:
+      - name: ollama-data
+        mountPath: /root/.ollama
+        readOnly: false
+        subPath: ollama
+  - name: openwebui
+    image: ghcr.io/open-webui/open-webui:v0.6.43
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: OLLAMA_BASE_URLS
+      value: "http://localhost:11434"
+    ports:
+    - containerPort: 8080
+      hostPort: 8080
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "2"
+        memory: "2Gi"
+    volumeMounts:
+    - name: openwebui-data
+      mountPath: /app/backend/data
+      readOnly: false
+      subPath: openwebui
+  volumes:
+    - name: ollama-data
+      persistentVolumeClaim:
+        claimName: ollama-data
+    - name: openwebui-data
+      persistentVolumeClaim:
+        claimName: openwebui-data
