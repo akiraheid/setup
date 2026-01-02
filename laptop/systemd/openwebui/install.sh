@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install OpenWebUI as a systemd service.
+# Install OpenWebUI and Ollama as a systemd service.
 
 set -ex
 
@@ -8,17 +8,20 @@ info() {
 }
 
 THIS_DIR=$(dirname "$(readlink -f "$0")")
-OWU_DIR=~/.config/systemd/user
-OWU_POD=${OWU_DIR}/pod-openwebui.yaml
+SYSD_DIR=~/.config/systemd/user
 
-info "Installing service"
-cp "${THIS_DIR}/pod.yaml" "${OWU_POD}"
+info "Installing Ollama..."
+cp "${THIS_DIR}/container-ollama.service" "${SYSD_DIR}/"
 
-escaped=$(systemd-escape "${OWU_POD}")
-svc_name="podman-kube@${escaped}.service"
+systemctl --user start container-ollama.service
+systemctl --user is-active container-ollama.service
+systemctl --user enable container-ollama.service
 
-systemctl --user start "${svc_name}"
-systemctl --user is-active "${svc_name}"
+info "Installing OpenWebUI..."
+cp "${THIS_DIR}/container-openwebui.service" "${SYSD_DIR}/"
+systemctl --user start container-openwebui.service
+systemctl --user is-active container-openwebui.service
+systemctl --user enable container-openwebui.service
 
-systemctl --user enable "${svc_name}"
+info "Done!"
 
