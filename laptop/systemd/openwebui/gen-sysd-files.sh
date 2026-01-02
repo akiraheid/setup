@@ -15,7 +15,7 @@ podman generate systemd --new --files --name ollama
 
 echo "Generate OpenWebUI systemd unit file..."
 podman create --name openwebui \
-    -e "OLLAMA_BASE_URLS=http://localhost:11434" \
+    -e "OLLAMA_BASE_URLS=http://host.containers.internal:11434" \
     -p "8080:8080" \
 	--cpus=2 \
 	--memory=1g \
