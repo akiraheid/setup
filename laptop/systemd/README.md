@@ -11,5 +11,6 @@ service.
 | ===== | ======================== |
 | 8080  | OpenWebUI                |
 | 8081  | MCP Read-only Filesystem |
+| 8123  | Home Assistant           |
 | 11434 | Ollama                   |
 
