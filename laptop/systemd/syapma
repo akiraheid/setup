@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+"""Manage applications as systemd services for the user executing this script."""
+
+import argparse
+from subprocess import CalledProcessError
+from subprocess import run as subrun
+
+SYSD_DIR="~/.config/systemd/user"
+
+def run(cmd:str):
+    """Run the given command."""
+    proc = subrun(cmd, shell=True, check=True)
+    if proc.stdout:
+        print(proc.stdout)
+
+def sanitize_app_name(app:str):
+    """Remove possible trailing slash from app name."""
+    return app.replace("/", "")
+
+def install(args):
+    """Argparse install subcommand handler."""
+    apps = args.APP
+    for app in apps:
+        app = sanitize_app_name(app)
+        print(f"Installing {app}")
+        install_sysd(app)
+        print(f"Installed {app}")
+
+def install_sysd(app:str):
+    """Install an application."""
+    try:
+        run(f"mkdir -p \"{SYSD_DIR}\"")
+        run(f"cp './{app}/{app}.service' \"{SYSD_DIR}/\"")
+        run("systemctl --user daemon-reload")
+        run(f"systemctl --user start '{app}'")
+        run(f"systemctl --user is-active '{app}'")
+        run(f"systemctl --user enable '{app}'")
+    except CalledProcessError:
+        print(f"ERROR: Could not uninstall {app}")
+
+def uninstall(args):
+    """Argparse uninstall subcommand handler."""
+    apps = args.APP
+    for app in apps:
+        app = sanitize_app_name(app)
+        print(f"Uninstalling {app}")
+        uninstall_sysd(app)
+        print(f"Uninstalled {app}")
+
+def uninstall_sysd(app:str):
+    """Uninstall an application."""
+    try:
+        run(f"systemctl --user disable '{app}'")
+        run(f"systemctl --user stop '{app}'")
+        run(f"rm \"{SYSD_DIR}/{app}.service\"")
+        run("systemctl --user daemon-reload")
+    except CalledProcessError:
+        print(f"ERROR: Could not uninstall {app}")
+
+def parse_args():
+    """Parse user arguments."""
+    parser = argparse.ArgumentParser(description="Install applications as systemd services")
+    subparsers = parser.add_subparsers(required=True)
+
+    install_help = "Install an application."
+    install_parser = subparsers.add_parser("install", help=install_help)
+
+    uninstall_help = "Uninstall an application."
+    uninstall_parser = subparsers.add_parser("uninstall", help=uninstall_help)
+
+    app_help = "Application name."
+    install_parser.add_argument("APP", type=str,  nargs="+", help=app_help)
+    install_parser.set_defaults(func=install)
+
+    uninstall_parser.add_argument("APP", type=str,  nargs="+", help=app_help)
+    uninstall_parser.set_defaults(func=uninstall)
+
+    return parser.parse_args()
+
+def main():
+    """The program entrypoint."""
+    args = parse_args()
+    args.func(args)
+
+if __name__ == "__main__":
+    main()
