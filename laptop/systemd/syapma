@@ -2,10 +2,12 @@
 """Manage applications as systemd services for the user executing this script."""
 
 import argparse
+import os.path
 from subprocess import CalledProcessError
 from subprocess import run as subrun
+import sys
 
-SYSD_DIR="~/.config/systemd/user"
+SYSD_DIR=f"{os.path.expanduser('~')}/.config/systemd/user"
 
 def run(cmd:str):
     """Run the given command."""
@@ -16,6 +18,10 @@ def run(cmd:str):
 def sanitize_app_name(app:str):
     """Remove possible trailing slash from app name."""
     return app.replace("/", "")
+
+def sysd_exists(app:str):
+    """Checks if the systemd service file exists."""
+    return os.path.isfile(f"./{app}")
 
 def install(args):
     """Argparse install subcommand handler."""
@@ -30,13 +36,23 @@ def install_sysd(app:str):
     """Install an application."""
     try:
         run(f"mkdir -p \"{SYSD_DIR}\"")
-        run(f"cp './{app}/{app}.service' \"{SYSD_DIR}/\"")
+
+        print("Generating systemd file")
+        run(f"./{app}/gen-sysd-files.sh")
+
+        print("Installing systemd file for user")
+        run(f"mv './{app}.service' \"{SYSD_DIR}/\"")
+
+        print("Starting service")
         run("systemctl --user daemon-reload")
         run(f"systemctl --user start '{app}'")
         run(f"systemctl --user is-active '{app}'")
+
+        print("Enable service at startup")
         run(f"systemctl --user enable '{app}'")
     except CalledProcessError:
-        print(f"ERROR: Could not uninstall {app}")
+        print(f"ERROR: Could not install {app}")
+        sys.exit(1)
 
 def uninstall(args):
     """Argparse uninstall subcommand handler."""
@@ -56,6 +72,7 @@ def uninstall_sysd(app:str):
         run("systemctl --user daemon-reload")
     except CalledProcessError:
         print(f"ERROR: Could not uninstall {app}")
+        sys.exit(1)
 
 def parse_args():
     """Parse user arguments."""
@@ -81,6 +98,7 @@ def main():
     """The program entrypoint."""
     args = parse_args()
     args.func(args)
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
