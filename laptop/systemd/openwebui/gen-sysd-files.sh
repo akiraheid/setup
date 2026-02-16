@@ -9,9 +9,10 @@ podman create --name ollama \
 	--memory=15g \
 	--memory-reservation=10g \
 	-v "ollama-data:/root/.ollama:rw" \
-    docker.io/ollama/ollama:0.13.5
+    docker.io/ollama/ollama:0.14.3
 
-podman generate systemd --new --files --name ollama
+podman generate systemd --new --name ollama > "ollama.service"
+podman rm ollama
 
 echo "Generate OpenWebUI systemd unit file..."
 podman create --name openwebui \
@@ -23,5 +24,5 @@ podman create --name openwebui \
     -v "openwebui-data:/app/backend/data:rw" \
     ghcr.io/open-webui/open-webui:v0.6.43
 
-podman generate systemd --new --files --name openwebui
-
+podman generate systemd --new --name openwebui > "openwebui.service"
+podman rm openwebui
