@@ -9,7 +9,7 @@ podman create --name ollama \
 	--memory=15g \
 	--memory-reservation=10g \
 	-v "ollama-data:/root/.ollama:rw" \
-    docker.io/ollama/ollama:0.14.3
+    docker.io/ollama/ollama:0.15.6
 
 podman generate systemd --new --name ollama > "ollama.service"
 podman rm ollama

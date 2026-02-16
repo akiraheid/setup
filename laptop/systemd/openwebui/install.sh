@@ -12,13 +12,14 @@ SYSD_DIR=~/.config/systemd/user
 
 info "Installing Ollama..."
 cp "${THIS_DIR}/ollama.service" "${SYSD_DIR}/"
-
+systemctl --user daemon-reload
 systemctl --user start ollama.service
 systemctl --user is-active ollama.service
 systemctl --user enable ollama.service
 
 info "Installing OpenWebUI..."
 cp "${THIS_DIR}/openwebui.service" "${SYSD_DIR}/"
+systemctl --user daemon-reload
 systemctl --user start openwebui.service
 systemctl --user is-active openwebui.service
 systemctl --user enable openwebui.service
