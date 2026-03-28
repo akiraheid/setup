@@ -49,6 +49,33 @@ install_bash_settings() {
 	info "Installed bash settings and tools"
 }
 
+# Install decoaps and dependencies
+install_decoaps() {
+	info "Installing decoaps..."
+	podman pull "docker.io/akiraheid/xserver@sha256:42ed83bdc72fe65c8ba2f87274012bdd13bb42f077bfde37b04132b3a1577e7d"
+	podman tag docker.io/akiraheid/xserver:latest docker.io/x11docker/xserver:latest
+
+	# Work in the repos directory, since that's where I'll edit things anyway
+	mkdir -p "${HOME}/repos"
+	pushd "${HOME}/repos"
+
+	git clone https://github.com/akiraheid/containerfiles.git
+	pushd containerfiles
+	./install black
+	./install eslint
+	./install gnucash
+	./install keepassxc
+	./install obsidian
+	./install prettier
+	./install pylint
+	./install shellcheck
+	./install signal
+	./install x11docker
+	popd # containerfiles
+	popd # ~/repos
+	info "Installed decoaps"
+}
+
 install_git() {
 	info "Installing git and settings..."
 	$sudo apt-get install -y git
@@ -110,37 +137,6 @@ install_tmux() {
 	info "Installing tmux..."
 	$sudo apt-get -y install tmux
 	info "Installed tmux and tmux configuration"
-}
-
-# Install decoaps and dependencies
-install_decoaps() {
-	info "Installing decoaps..."
-	image=x11docker/xserver
-	podman pull "docker.io/${image}:latest"
-	sha=$(podman images | grep "${image}" | sed 's/\s\+/ /g' | cut -d ' ' -f 3)
-	expected=b97c942d93c7
-	if [ "$sha" != "${expected}" ]; then
-		fatal "Hash of ${image} was '${sha}' instead of expected '${expected}'"
-	fi
-
-	# Work in the repos directory, since that's where I'll edit things anyway
-	mkdir -p "${HOME}/repos"
-	pushd "${HOME}/repos"
-
-	git clone https://github.com/akiraheid/containerfiles.git
-	pushd containerfiles
-	./install black
-	./install eslint
-	./install gnucash
-	./install keepassxc
-	./install obsidian
-	./install prettier
-	./install pylint
-	./install shellcheck
-	./install signal
-	popd # containerfiles
-	popd # ~/repos
-	info "Installed decoaps"
 }
 
 # Avahi is used for mDNS to resolve hosts via [hostname].local without a DNS
