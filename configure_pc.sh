@@ -1,25 +1,32 @@
 #!/bin/bash
-# Set up PC environment
+# Set up the PC and user account interactively.
 set -e
 
 # Define needed environment variables and helper functions
 setup_env() {
     # Use sudo if we are not already root
-    SUDO=sudo
+    sudo=sudo
     if [ "$(id -u)" -eq 0 ]; then
-        SUDO=
+        sudo=
     fi
 
-	THIS_DIR=$(dirname "$(readlink -f "$0")")
+	scriptDir=$(dirname "$(readlink -f "$0")")
 
-	. "${THIS_DIR}/bash/logging"
+	. "${scriptDir}/bash/logging"
 }
 
 # Update system
 update_system() {
 	info "Updating system..."
-	$SUDO ./bash/updateSystem
+	$sudo ./bash/updateSystem
 	info "System updated"
+}
+
+generate_ssh_keys() {
+	info "Generating SSH keys..."
+	$sudo apt-get install -y openssh
+	ssk-keygen -t ed25519
+	info "Generated SSH keys"
 }
 
 # Install bash settings
@@ -44,17 +51,25 @@ install_bash_settings() {
 	info "Installed bash settings and tools"
 }
 
+install_git() {
+	info "Installing git and settings..."
+	$sudo apt-get install -y git
+	date=$(date +%Y%m%d-%H%M%S)
+	cp --suffix="${date}" "${scriptDir}/pc/dotfiles/gitconfig" "${HOME}/.gitconfig"
+	info "Installed git and settings"
+}
+
 # Install podman and settings
 install_podman() {
 	info "Installing podman and settings..."
-	$SUDO apt-get install -y podman
+	$sudo apt-get install -y podman
 	info "Installed podman and settings"
 }
 
 # Install vim and settings
 install_vim() {
 	info "Installing vim..."
-	$SUDO apt-get -y install vim
+	$sudo apt-get -y install vim
 	date=$(date +%Y%m%d-%H%M%S)
 	cp --suffix="${date}" ./vim/vimrc ~/.vimrc
 	info "Installed vim and vim configuration"
@@ -95,7 +110,7 @@ install_vim() {
 # Install tmux and settings
 install_tmux() {
 	info "Installing tmux..."
-	$SUDO apt-get -y install tmux
+	$sudo apt-get -y install tmux
 	info "Installed tmux and tmux configuration"
 }
 
@@ -133,16 +148,16 @@ install_decoaps() {
 # Avahi is used for mDNS to resolve hosts via [hostname].local without a DNS
 # DNS server on the local network.
 setup_mDNS() {
-	$SUDO apt-get install -y avahi-daemon libnss-mdns
+	$sudo apt-get install -y avahi-daemon libnss-mdns
 }
 
 # Set up wireguard for connecting to the NAS via NFS.
 setup_wireguard() {
 	info "Installing wireguard"
-	bash "${THIS_DIR}/bin/installWireguard.sh"
+	bash "${scriptDir}/bin/installWireguard.sh"
 
 	# Not the NAS, so change to a client IP
-	$SUDO sed -i 's#10.222.0.1/24#10.222.0.2/24#' /etc/wireguard/wg0.conf
+	$sudo sed -i 's#10.222.0.1/24#10.222.0.2/24#' /etc/wireguard/wg0.conf
 
 	info "Update the NAS IP with this client peer information"
 	echo "[Peer]"
@@ -201,10 +216,12 @@ setup_wireguard() {
 	setup_env
 	update_system
 	install_bash_settings
+	install_git
 	install_tmux
 	install_vim
 	install_podman
 	install_decoaps
+	generate_ssh_keys
 	setup_mDNS
 	setup_wireguard
 	info "Restart computer to use kubectl"
