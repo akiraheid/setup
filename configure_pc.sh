@@ -41,8 +41,6 @@ install_bash_settings() {
 
 	d=${HOME}/.local/bin
 	mkdir -p "${d}"
-	cp --suffix="${date}" ./bin/oil "${d}/oil"
-	cp --suffix="${date}" ./bin/syncthing "${d}/syncthing"
 
 	d=${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions
 	mkdir -p "${d}"
