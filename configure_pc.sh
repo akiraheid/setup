@@ -15,13 +15,6 @@ setup_env() {
 	. "${scriptDir}/bash/logging"
 }
 
-# Update system
-update_system() {
-	info "Updating system..."
-	$sudo ./bash/updateSystem
-	info "System updated"
-}
-
 generate_ssh_keys() {
 	info "Generating SSH keys..."
 	$sudo apt-get install -y openssh
@@ -91,6 +84,13 @@ install_podman() {
 	info "Installed podman and settings"
 }
 
+# Install tmux and settings
+install_tmux() {
+	info "Installing tmux..."
+	$sudo apt-get -y install tmux
+	info "Installed tmux and tmux configuration"
+}
+
 # Install vim and settings
 install_vim() {
 	info "Installing vim..."
@@ -132,13 +132,6 @@ install_vim() {
 	info "Installed vim plugins"
 }
 
-# Install tmux and settings
-install_tmux() {
-	info "Installing tmux..."
-	$sudo apt-get -y install tmux
-	info "Installed tmux and tmux configuration"
-}
-
 # Avahi is used for mDNS to resolve hosts via [hostname].local without a DNS
 # DNS server on the local network.
 setup_mDNS() {
@@ -158,6 +151,13 @@ setup_wireguard() {
 	echo "PublicKey = $(/etc/wireguard/publickey)"
 	echo "Endpoint = nas01:51820"
 	echo "AllowedIPs = 10.222.0.2/32"
+}
+
+# Update system
+update_system() {
+	info "Updating system..."
+	$sudo ./bash/updateSystem
+	info "System updated"
 }
 
 #setup_firewall() {
