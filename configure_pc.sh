@@ -77,11 +77,27 @@ install_git() {
 	info "Installed git and settings"
 }
 
+install_openwebui() {
+	info "Installing OpenWebUI..."
+	local syapmaDir=$(readlink -f "${scriptDir}/laptop/systemd")
+	pushd "${syapmaDir}"
+	local syapma="${syapmaDir}/syapma"
+	"${syapma}" install openwebui
+	popd
+	info "Installed OpenWebUI"
+}
+
 # Install podman and settings
 install_podman() {
-	info "Installing podman and settings..."
+	info "Installing podman..."
 	$sudo apt-get install -y podman
-	info "Installed podman and settings"
+	info "Installed podman"
+}
+
+install_rsync() {
+	info "Installing rsync..."
+	$sudo apt-get install -y rsync
+	info "Installed rsync"
 }
 
 # Install tmux and settings
@@ -210,6 +226,7 @@ update_system() {
 	setup_env
 	update_system
 	install_bash_settings
+	install_rsync
 	install_git
 	install_tmux
 	install_vim
