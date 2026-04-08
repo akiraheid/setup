@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ex
 
+this_dir=$(dirname "$(readlink -f "$0")")
+cd "$this_dir"
+
 echo "Generate Ollama systemd unit file..."
 podman create --name ollama \
     -e "OLLAMA_CONTEXT_LENGTH=130000" \
@@ -9,7 +12,7 @@ podman create --name ollama \
 	--memory=30g \
 	--memory-reservation=15g \
 	-v "ollama-data:/root/.ollama:rw" \
-    docker.io/ollama/ollama:0.19.0-rocm
+    docker.io/ollama/ollama:0.20.2-rocm
 
 podman generate systemd --new --name ollama > "ollama.service"
 podman rm ollama

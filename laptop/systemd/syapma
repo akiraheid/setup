@@ -9,6 +9,10 @@ import sys
 
 SYSD_DIR=f"{os.path.expanduser('~')}/.config/systemd/user"
 
+def install_exists(app:str):
+    """Checks if the install script file exists."""
+    return os.path.isfile(f"./{app}/install.sh")
+
 def run(cmd:str):
     """Run the given command."""
     proc = subrun(cmd, shell=True, check=True)
@@ -40,8 +44,12 @@ def install_sysd(app:str):
         print("Generating systemd file")
         run(f"./{app}/gen-sysd-files.sh")
 
-        print("Installing systemd file for user")
-        run(f"mv './{app}.service' \"{SYSD_DIR}/\"")
+        if install_exists(app):
+            print("Install script exists. Executing")
+            run(f"bash ./{app}/install.sh")
+        else:
+            print("Installing systemd file for user")
+            run(f"mv './{app}.service' \"{SYSD_DIR}/\"")
 
         print("Starting service")
         run("systemctl --user daemon-reload")
