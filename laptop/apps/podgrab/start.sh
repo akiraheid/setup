@@ -16,8 +16,9 @@ clean() {
 }
 
 start() {
-	appDir=${HOME}/Downloads/podgrab
-	configDir=${appDir}/config
+	app=podgrab
+	appDir=${HOME}/Downloads/${app}
+	configDir=${XDG_CONFIG_HOME:-$HOME/.config/${app}}
 	downloadDir=${appDir}/download
 
 	mkdir -p "$configDir" "$downloadDir"
