@@ -17,7 +17,6 @@ setup_env() {
 
 generate_ssh_keys() {
 	info "Generating SSH keys..."
-	$sudo apt-get install -y openssh
 	ssh-keygen -t ed25519
 	info "Generated SSH keys"
 }
@@ -45,8 +44,9 @@ install_bash_settings() {
 # Install decoaps and dependencies
 install_decoaps() {
 	info "Installing decoaps..."
-	podman pull "docker.io/akiraheid/xserver@sha256:42ed83bdc72fe65c8ba2f87274012bdd13bb42f077bfde37b04132b3a1577e7d"
-	podman tag docker.io/akiraheid/xserver:latest docker.io/x11docker/xserver:latest
+	image=docker.io/akiraheid/xserver@sha256:42ed83bdc72fe65c8ba2f87274012bdd13bb42f077bfde37b04132b3a1577e7d
+	podman pull "${image}"
+	podman tag "${image}" docker.io/x11docker/xserver:latest
 
 	# Work in the repos directory, since that's where I'll edit things anyway
 	mkdir -p "${HOME}/repos"
