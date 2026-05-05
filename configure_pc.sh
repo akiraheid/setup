@@ -18,7 +18,7 @@ setup_env() {
 generate_ssh_keys() {
 	info "Generating SSH keys..."
 	$sudo apt-get install -y openssh
-	ssk-keygen -t ed25519
+	ssh-keygen -t ed25519
 	info "Generated SSH keys"
 }
 
