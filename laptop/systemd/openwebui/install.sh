@@ -10,19 +10,22 @@ info() {
 THIS_DIR=$(dirname "$(readlink -f "$0")")
 SYSD_DIR=~/.config/systemd/user
 
+load_service() {
+	mv "${THIS_DIR}/${1}.service" "${SYSD_DIR}/"
+	systemctl --user daemon-reload
+	systemctl --user start "${1}.service"
+	systemctl --user is-active "${1}.service"
+	systemctl --user enable "${1}.service"
+}
+
 info "Installing Ollama..."
-cp "${THIS_DIR}/ollama.service" "${SYSD_DIR}/"
-systemctl --user daemon-reload
-systemctl --user start ollama.service
-systemctl --user is-active ollama.service
-systemctl --user enable ollama.service
+load_service ollama
 
 info "Installing OpenWebUI..."
-cp "${THIS_DIR}/openwebui.service" "${SYSD_DIR}/"
-systemctl --user daemon-reload
-systemctl --user start openwebui.service
-systemctl --user is-active openwebui.service
-systemctl --user enable openwebui.service
+load_service openwebui
+
+info "Installing OpenTerminal..."
+load_service openterminal
 
 info "Done!"
 
