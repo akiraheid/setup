@@ -157,7 +157,7 @@ setup_mDNS() {
 # Set up wireguard for connecting to the NAS via NFS.
 setup_wireguard() {
 	info "Installing wireguard"
-	bash "${scriptDir}/bin/installWireguard.sh"
+	bash "${scriptDir}/bash/installWireguard.sh"
 
 	# Not the NAS, so change to a client IP
 	$sudo sed -i 's#10.222.0.1/24#10.222.0.2/24#' /etc/wireguard/wg0.conf
@@ -224,16 +224,16 @@ update_system() {
 # Start configuration
 {
 	setup_env
-	update_system
-	install_bash_settings
-	install_rsync
-	install_git
-	install_tmux
-	install_vim
-	install_podman
-	install_decoaps
-	generate_ssh_keys
-	setup_mDNS
+	#update_system
+	#install_bash_settings
+	#install_rsync
+	#install_git
+	#install_tmux
+	#install_vim
+	#install_podman
+	#install_decoaps
+	#generate_ssh_keys
+	#setup_mDNS
 	setup_wireguard
 	info "Restart computer to use kubectl"
 }
