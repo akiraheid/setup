@@ -28,7 +28,7 @@ directory may have the trailing slash (`/`).
 | Port  | Service                  |
 | ===== | ======================== |
 | 8080  | OpenWebUI                |
-| 8081  | MCP Read-only Filesystem |
 | 8082  | OpenTerminal             |
 | 8123  | Home Assistant           |
+| 8880  | Kokoro                   |
 | 11434 | Ollama                   |

@@ -32,7 +32,7 @@ podman create --name openwebui \
 	--memory-reservation=500m \
 	--replace \
 	-v "openwebui-data:/app/backend/data:rw" \
-	ghcr.io/open-webui/open-webui:v0.9.2
+	ghcr.io/open-webui/open-webui:v0.9.5
 
 podman generate systemd --new --name openwebui > "openwebui.service"
 podman rm openwebui
@@ -48,6 +48,19 @@ podman create --name "${name}" \
 	--replace \
 	-v "openterminal:/home/user:rw" \
 	ghcr.io/open-webui/open-terminal:0.11.34
+
+podman generate systemd --new --name "${name}" > "${name}.service"
+podman rm "${name}"
+
+echo "Generate Kokoro systemd unit file..."
+name=kokoro
+podman create --name "${name}" \
+	--cpus=15 \
+	--memory=10g \
+	--memory-reservation=500m \
+	-p "8880:8880" \
+	--replace \
+	ghcr.io/remsky/kokoro-fastapi-cpu:v0.3.0
 
 podman generate systemd --new --name "${name}" > "${name}.service"
 podman rm "${name}"

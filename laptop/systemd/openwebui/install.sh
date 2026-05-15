@@ -27,5 +27,8 @@ load_service openwebui
 info "Installing OpenTerminal..."
 load_service openterminal
 
+info "Installing Kokoro..."
+load_service kokoro
+
 info "Done!"
 
