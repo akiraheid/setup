@@ -38,6 +38,8 @@ podman generate systemd --new --name openwebui > "openwebui.service"
 podman rm openwebui
 
 echo "Generate OpenTerminal systemd unit file..."
+zenDataDir=${HOME}/Documents/zen-data
+mkdir -p "${zenDataDir}"
 name=openterminal
 podman create --name "${name}" \
 	--cpus=1 \
@@ -46,7 +48,7 @@ podman create --name "${name}" \
 	--memory-reservation=250m \
 	-p "8082:8000" \
 	--replace \
-	-v "openterminal:/home/user:rw" \
+	-v "${zenDataDir}:/home/user:rw" \
 	ghcr.io/open-webui/open-terminal:0.11.34
 
 podman generate systemd --new --name "${name}" > "${name}.service"
