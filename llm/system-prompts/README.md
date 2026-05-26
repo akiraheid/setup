@@ -8,4 +8,6 @@ System prompts online may be written for other LLM systems like Claude. The foll
 
 | Service | Tool | OpenWebUI Tool |
 | :-----: | :--: | :------------: |
-| Claude  | `TodoWrite` | `create_task`
+| Claude  | `TodoWrite` | `create_tasks`
+| Claude  | `file_read` | `read_file`
+
