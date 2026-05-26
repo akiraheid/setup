@@ -11,7 +11,6 @@ podman create --name ollama \
 	--cpus=15 \
 	--device /dev/kfd \
 	--device /dev/dri \
-	-e "OLLAMA_CONTEXT_LENGTH=130000" \
 	--group-add keep-groups \
 	--memory=1g \
 	--memory-reservation=500m \
