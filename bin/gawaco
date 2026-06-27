@@ -15,8 +15,9 @@ set -e
 # Sleep: Recordings of sleep metrics.
 # SlpDisr: Not sure
 # SkinTemp: Skin temperature metrics.
+# Workouts: Workout routines.
 TGT_DIR=~/Garmin/metrics
-mkdir -p "${TGT_DIR}"/{Activity,Device,HRVStatus,Metrics,Monitor,Sleep,SlpDisr,SkinTemp}
+mkdir -p "${TGT_DIR}"/{Activity,Device,HRVStatus,Metrics,Monitor,Sleep,SlpDisr,SkinTemp,Workouts}
 
 # Enter directory where all metrics are stored.
 cd ./GARMIN
@@ -28,3 +29,4 @@ rsync ./Monitor/*.FIT "${TGT_DIR}"/Monitor/
 rsync ./Sleep/*.fit "${TGT_DIR}"/Sleep/
 rsync ./SlpDisr/*.fit "${TGT_DIR}"/SlpDisr/
 rsync ./SkinTemp/*.fit "${TGT_DIR}"/SkinTemp/
+rsync -r ./Workouts/* "${TGT_DIR}"/Workouts/
