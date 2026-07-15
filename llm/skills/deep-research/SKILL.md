@@ -1,11 +1,11 @@
 ---
-name: researcher
-description: A skill for conducting deep, thorough, and nuanced research on a wide range of topics including medicine, technology, art, and history. Use this skill whenever the user asks to research, investigate, look into, provide a deep dive, or perform an analysis on a specific topic. The skill ensures a variety of perspectives are presented and uses only highly credible sources like .edu, .gov, or professional academic institutions.
+name: deep-research
+description: A skill for conducting deep, thorough, and nuanced research on a wide range of topics including medicine, technology, art, and history. Trigger this skill whenever the user asks to research, investigate, look into, provide a deep dive, or perform an analysis on a specific topic. Even if the user's request is brief, use this skill if the subject matter warrants academic-level investigation. The skill ensures a variety of perspectives are presented and uses only highly credible sources like .edu, .gov, or professional academic institutions.
 ---
 
-# Researcher
+# Deep research
 
-This skill is designed to perform high-quality, academic-style research. It avoids surface-level summaries in favor of deep investigation and multi-perspective analysis.
+A skill to perform high-quality, academic-style research. It avoids surface-level summaries in favor of deep investigation and multi-perspective analysis.
 
 ## Research Process
 
@@ -14,20 +14,20 @@ Determine the breadth and depth required. Identify key questions that need answe
 
 ### 2. Information Gathering
 When searching for information, follow these strict criteria:
-- **Source Credibility**: Priorable websites ending in `.edu`, `.gov`, or `.org` (from reputable organizations). Look for peer-reviewed journals, academic repositories, and professional institutional websites.
-- **Diversity of Perspective**: Actively search for different viewpoints, even conflicting ones. For historical topics, look for different cultural or era-specific interpretations. For medical or technological topics, look for different schools of thought or competing methodologies.
-- **Verifiability**: Ensure that the information found can be traced back to a reliable primary or secondary source. Provide URLs to the sources used.
+- Source Credibility: Priorable websites ending in `.edu`, `.gov`, or `.org` (from reputable organizations). Look for peer-reviewed journals, academic repositories, and professional institutional websites. Use search parameters like `site:.edu` or `site:.gov` to restrict results to reputable organizations. Verify the author's credentials or the institution's reputation when a source is not immediately recognizable.
+- Diversity of Perspective: Actively search for different viewpoints, even conflicting ones. For historical topics, look for different cultural or era-specific interpretations. For medical or technological topics, look for different schools of thought or competing methodologies. For example, for medical topics, compare clinical trial results with observational studies; for historical topics, compare different cultural interpretations of the same event.
+- Verifiability: Ensure that the information found can be traced back to a reliable primary or secondary source. Provide URLs to the sources used.
 
 ### 3. Synthesis and Structuring
 Organize the findings into a structured report:
-- **Introduction**: Define the topic and its significance.
-- **Detailed Analysis**: Break the topic down into thematic or chronological sub-sections.
-- **Nuanced Perspectives**: Dedicate a specific section to highlighting different viewpoints, debates, or complexities within the topic.
-- **Conclusion**: Summarize the findings and suggest areas for further investigation.
+- Introduction: Define the topic and its significance.
+- Detailed Analysis: Break the topic down into thematic or chronological sub-sections.
+- Nuanced Perspectives: Dedicate a specific section to highlighting different viewpoints, debates, or complexities within the topic.
+- Conclusion: Summarize the findings and suggest areas for further investigation.
 
 ### 4. Citation and Referencing
-- **In-text Citations**: Every significant fact, figure, or argument must be accompanied by a in-text citation referencing a resource (e.g. [1] references the first numbered list item URL).
-- **Reference List**: At the end of the research, provide a comprehensive numbered list of all sources used, including full URLs where applicable. Verify the URLs are to valid websites. If an invalid URL is found, replace information cited to that URL with information from a valid URL.
+- In-text Citations: Every significant fact, figure, or argument must be accompanied by a in-text citation referencing a resource (e.g. [1] references the first numbered list item URL).
+- Reference List: At the end of the research, provide a comprehensive numbered list of all sources used, including full URLs where applicable. Verify the URLs are to valid websites. If an invalid URL is found, replace information cited to that URL with information from a valid URL.
 
 ## Output Template
 
