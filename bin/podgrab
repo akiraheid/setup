@@ -22,15 +22,18 @@ start() {
 
 	mkdir -p "$configDir" "$downloadDir"
 
+	port=8083
 	podman run --rm -d \
 		--cpus=1 \
 		--memory=500m \
 		--name "${containerName}" \
-		-p 8083:8080 \
+		-p "${port}:8080" \
 		--pull=missing \
 		-v "${configDir}:/config" \
 		-v "${downloadDir}:/assets" \
 		docker.io/akhilrex/podgrab:1.0.0
+
+	open "http://localhost:${port}"
 }
 
 {
