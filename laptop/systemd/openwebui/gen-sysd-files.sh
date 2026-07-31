@@ -31,7 +31,7 @@ podman create --name openwebui \
 	--memory-reservation=500m \
 	--replace \
 	-v "openwebui-data:/app/backend/data:rw" \
-	ghcr.io/open-webui/open-webui:v0.10.2
+	ghcr.io/open-webui/open-webui:v0.11.0
 
 podman generate systemd --new --name openwebui > "openwebui.service"
 podman rm openwebui
