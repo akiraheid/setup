@@ -61,7 +61,7 @@ podman create --name "${name}" \
 	--memory-reservation=500m \
 	-p "8880:8880" \
 	--replace \
-	ghcr.io/remsky/kokoro-fastapi-cpu:v0.3.0
+	ghcr.io/remsky/kokoro-fastapi-cpu:v0.5.0
 
 podman generate systemd --new --name "${name}" > "${name}.service"
 podman rm "${name}"
