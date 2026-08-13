@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Download a URL and convert its HTML to Markdown
+
+set -e
+
+# Check if URL argument was provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <url>" >&2
+    exit 1
+fi
+
+URL="$1"
+
+# Extract filename from URL or use default
+BASENAME=$(basename "$URL" | cut -d'?' -f1)
+if [ -z "$BASENAME" ]; then
+    BASENAME="page.html"
+fi
+
+# Create output filename with .md extension
+OUTPUT_FILE="${BASENAME%.html}.md"
+
+# Create temp file for downloaded HTML
+TEMP_FILE=$(mktemp)
+
+# Trap to ensure cleanup on exit
+# Disable SC2064 because we want the temp file in TEMP_FILE to be deleted and
+# not expanded when signalled, which can cause a different value to be used.
+# shellcheck disable=SC2064
+trap "rm '$TEMP_FILE'" EXIT
+
+# Download the content to temp file
+wget -q -O "$TEMP_FILE" "$URL"
+
+# Convert to Markdown and save to output file
+html2markdown --input "$TEMP_FILE" > "$OUTPUT_FILE"
+
+echo "Output saved to $OUTPUT_FILE"
