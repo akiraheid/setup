@@ -17,7 +17,7 @@ podman create --name ollama \
 	-p "11434:11434" \
 	--replace \
 	-v "ollama-data:/root/.ollama:rw" \
-	docker.io/ollama/ollama:0.32.9-rocm
+	docker.io/ollama/ollama:0.32.14-rocm
 
 podman generate systemd --new --name ollama > "ollama.service"
 podman rm ollama
