@@ -7,10 +7,15 @@ cd "$this_dir"
 echo "Generate Ollama systemd unit file..."
 # --memory is 1g because the machine uses shared memory (RAM + GPU VRAM) and the
 # GPU is already set to use 90% of the memory.
+#
+# OLLAMA_KV_CACHE_TYPE=q8_0 per Ollama recommendation takes half the memory with
+# only slight loss in precision.
+# https://docs.ollama.com/faq#how-can-i-set-the-quantization-type-for-the-k/v-cache
 podman create --name ollama \
 	--cpus=15 \
 	--device /dev/kfd \
 	--device /dev/dri \
+	-e "OLLAMA_KV_CACHE_TYPE=q8_0" \
 	--group-add keep-groups \
 	--memory=1g \
 	--memory-reservation=500m \
@@ -23,8 +28,11 @@ podman generate systemd --new --name ollama > "ollama.service"
 podman rm ollama
 
 echo "Generate OpenWebUI systemd unit file..."
+# Disable ENABLE_MEMORY_SYSTEM_CONTEXT to prevent injecting memories into the
+# system prompt and invalidating the KV-cache
 podman create --name openwebui \
 	--cpus=2 \
+	-e "ENABLE_MEMORY_SYSTEM_CONTEXT=false" \
 	-e "OLLAMA_BASE_URLS=http://host.containers.internal:11434" \
 	-p "8080:8080" \
 	--memory=1g \
