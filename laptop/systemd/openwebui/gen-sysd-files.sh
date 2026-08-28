@@ -61,6 +61,22 @@ podman create --name "${name}" \
 podman generate systemd --new --name "${name}" > "${name}.service"
 podman rm "${name}"
 
+echo "Generate Open WebUI Computer systemd unit file..."
+name=open-computer
+podman create --name "${name}" \
+	--cpus=2 \
+	--memory=1g \
+	--memory-reservation=500m \
+	-p "8084:8000" \
+	--replace \
+	-v "open-computer-data:/data:rw" \
+	-v "open-computer-workspace:/workspace:rw" \
+	-w "/workspace" \
+	ghcr.io/open-webui/computer:0.9.21
+
+podman generate systemd --new --name "${name}" > "${name}.service"
+podman rm "${name}"
+
 echo "Generate Kokoro systemd unit file..."
 name=kokoro
 podman create --name "${name}" \

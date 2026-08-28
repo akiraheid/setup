@@ -29,6 +29,7 @@ directory may have the trailing slash (`/`).
 | ===== | ======================== |
 | 8080  | OpenWebUI                |
 | 8082  | OpenTerminal             |
+| 8084  | Open WebUI Computer      |
 | 8123  | Home Assistant           |
 | 8880  | Kokoro                   |
 | 11434 | Ollama                   |
