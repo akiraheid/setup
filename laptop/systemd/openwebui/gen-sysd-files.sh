@@ -69,6 +69,7 @@ podman create --name "${name}" \
 	--memory-reservation=500m \
 	-p "8084:8000" \
 	--replace \
+	-v "open-computer-agents:/home/cptr/.agents/:rw" \
 	-v "open-computer-data:/data:rw" \
 	-v "open-computer-workspace:/workspace:rw" \
 	-w "/workspace" \
