@@ -72,7 +72,7 @@ podman create --name "${name}" \
 	-v "open-computer-data:/data:rw" \
 	-v "open-computer-workspace:/workspace:rw" \
 	-w "/workspace" \
-	ghcr.io/open-webui/computer:0.9.21
+	docker.io/akiraheid/openwebui-computer:0.0.1
 
 podman generate systemd --new --name "${name}" > "${name}.service"
 podman rm "${name}"
