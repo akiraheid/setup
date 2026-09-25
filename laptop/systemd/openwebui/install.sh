@@ -21,12 +21,6 @@ load_service() {
 info "Installing Ollama..."
 load_service ollama
 
-info "Installing OpenWebUI..."
-load_service openwebui
-
-info "Installing OpenTerminal..."
-load_service openterminal
-
 info "Installing Open WebUI Computer..."
 load_service open-computer
 

@@ -27,40 +27,6 @@ podman create --name ollama \
 podman generate systemd --new --name ollama > "ollama.service"
 podman rm ollama
 
-echo "Generate OpenWebUI systemd unit file..."
-# Disable ENABLE_MEMORY_SYSTEM_CONTEXT to prevent injecting memories into the
-# system prompt and invalidating the KV-cache
-podman create --name openwebui \
-	--cpus=2 \
-	-e "ENABLE_MEMORY_SYSTEM_CONTEXT=false" \
-	-e "OLLAMA_BASE_URLS=http://host.containers.internal:11434" \
-	-p "8080:8080" \
-	--memory=1g \
-	--memory-reservation=500m \
-	--replace \
-	-v "openwebui-data:/app/backend/data:rw" \
-	ghcr.io/open-webui/open-webui:v0.11.0
-
-podman generate systemd --new --name openwebui > "openwebui.service"
-podman rm openwebui
-
-echo "Generate OpenTerminal systemd unit file..."
-zenDataDir=${HOME}/Documents/zen-data
-mkdir -p "${zenDataDir}"
-name=openterminal
-podman create --name "${name}" \
-	--cpus=1 \
-	-e "OPEN_TERMINAL_API_KEY=MySuperSecretKey294" \
-	--memory=500m \
-	--memory-reservation=250m \
-	-p "8082:8000" \
-	--replace \
-	-v "${zenDataDir}:/home/user:rw" \
-	ghcr.io/open-webui/open-terminal:0.11.34
-
-podman generate systemd --new --name "${name}" > "${name}.service"
-podman rm "${name}"
-
 echo "Generate Open WebUI Computer systemd unit file..."
 name=open-computer
 podman create --name "${name}" \
