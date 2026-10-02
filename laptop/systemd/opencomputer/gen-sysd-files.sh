@@ -15,6 +15,7 @@ podman create --name ollama \
 	--cpus=15 \
 	--device /dev/kfd \
 	--device /dev/dri \
+	-e "OLLAMA_IGPU_ENABLE=1" \
 	-e "OLLAMA_KV_CACHE_TYPE=q8_0" \
 	--group-add keep-groups \
 	--memory=1g \
@@ -28,16 +29,24 @@ podman generate systemd --new --name ollama > "ollama.service"
 podman rm ollama
 
 echo "Generate Open WebUI Computer systemd unit file..."
-name=open-computer
+name=opencomputer
+skills_dir=${HOME}/Documents/opencomputer/skills
+data_dir=${HOME}/Documents/opencomputer/data
+readonly_dir=${HOME}/Documents/opencomputer/readonly
+workspace_dir=${HOME}/Documents/opencomputer/workspace
+mkdir -p "${data_dir}" "${readonly_dir}" "${skills_dir}" "${workspace_dir}"
 podman create --name "${name}" \
 	--cpus=2 \
 	--memory=1g \
 	--memory-reservation=500m \
 	-p "8084:8000" \
 	--replace \
-	-v "open-computer-agents:/home/cptr/.agents/:rw" \
-	-v "open-computer-data:/data:rw" \
-	-v "open-computer-workspace:/workspace:rw" \
+	--userns=keep-id \
+	--user="$(id -u):$(id -g)" \
+	-v "${data_dir}:/data:rw" \
+	-v "${readonly_dir}:/readonly:ro" \
+	-v "${skills_dir}:/home/cptr/.agents/skills:rw" \
+	-v "${workspace_dir}:/workspace:rw" \
 	-w "/workspace" \
 	docker.io/akiraheid/openwebui-computer:0.0.1
 

@@ -22,7 +22,7 @@ info "Installing Ollama..."
 load_service ollama
 
 info "Installing Open WebUI Computer..."
-load_service open-computer
+load_service opencomputer
 
 info "Installing Kokoro..."
 load_service kokoro
