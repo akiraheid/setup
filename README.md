@@ -1,21 +1,41 @@
 # Setup
 
-Repository for my setup.
+Set up machines.
 
-## Personal Computer (PC)
+## Usage
 
-To configure for a PC, run
-
-```text
-wget -O - https://raw.githubusercontent.com/akiraheid/setup/refs/heads/master/pc.sh | bash
-```
-
-## Home Server
-
-Run
+Run the `configure.sh` script found in the various machine folders.
 
 ```bash
-$ ./configure_server_home.sh
+bash ./<machine>/configure.sh
 ```
 
-More information can be found at the Home Server [README](./server-home/README.md).
+## Directory structure
+
+There are dedicated directories for configuring machines and a `common` directory
+for common configurations and scripts between all machines.
+
+```
+setup/
+|_common/
+|_laptop/
+|_nas/
+|_pc/
+|_vps/
+```
+
+### `laptop/`
+
+Mobile laptop, mean to operate outside the home network.
+
+### `nas/`
+
+Network Attached Storage (NAS) device on the home network.
+
+### `pc/`
+
+Stationary machine on the home network.
+
+### `vps/`
+
+Virtual Private Server (VPS) hosted via VPS service.
