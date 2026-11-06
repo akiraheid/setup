@@ -1,25 +1,49 @@
 #!/usr/bin/env bash
 # Configure the NAS
 
+set -ex
+
 thisDir=$(dirname "$(readlink -f "$0")")
+commonDir="${thisDir}"/../common
+sudo=
+
+. "${commonDir}"/logging.sh
+
+check_sudo() {
+	if ! [[ "$UID" ]]; then
+		sudo=sudo
+	fi
+}
 
 install_ssh() {
-	sudo apt-get install -y openssh-server
+	bash "${commonDir}"/ssh/configure-server.sh
+}
 
-	echo "Configure SSH server"
-	sudo cp "./${thisDir}/../ssh/sshd_config" /etc/ssh/sshd_config
+install_ufw() {
+	info "Installing Uncomplicated Firewall (UFW)..."
+	$sudo apt-get install -y --no-install-recommends ufw
+}
+
+lockdown_firewall() {
+	$sudo ufw default deny
+	$sudo ufw enable
 }
 
 open_reverse_tunnel() {
+	info "Setting up reverse tunnel"
 	ssh -N -R 2222:localhost:22 tunnel@heid.cc
 }
 
 setup_mDNS() {
-	bash "${thisDir}"/../common/setup_mDNS.sh
+	bash "${commonDir}"/setup_mDNS.sh
 }
 
 {
-	#install_ssh
+	$sudo apt-get update
+	check_sudo
+	install_ufw
+	install_ssh
 	#open_reverse_tunnel
-	setup_mDNS
+	#setup_mDNS
+	#lockdown_firewall
 }

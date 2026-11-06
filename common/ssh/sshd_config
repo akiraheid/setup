@@ -1,6 +1,6 @@
 AllowAgentForwarding no
 AllowTcpForwarding no
-HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/server_ed25519
 LoginGraceTime 5
 LogLevel VERBOSE
 PasswordAuthentication no
@@ -9,7 +9,12 @@ PermitRootLogin no
 Port 22
 Protocol 2
 PubKeyAuthentication yes
-RSAAuthentication yes
-ServerKeyBits 4096
+
+# Deprecated
+#RSAAuthentication yes
+
+# Deprecated
+#ServerKeyBits 4096
+
 UseDNS no
 X11Forwarding no
